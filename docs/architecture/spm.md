@@ -12,7 +12,6 @@ CoupleWidget/
 CoupleWidgetWidget/
 Packages/
     Domain/
-    DomainFakes/
     Data/
     DesignSystem/
     SharedStorage/
@@ -34,11 +33,6 @@ Depends on: `Foundation` only.
 Repository implementations, data transfer objects, the Supabase client configuration, and the connectivity monitor.
 Depends on: `Domain`, `SharedStorage`, `Supabase`.
 
-### DomainFakes
-
-Fake implementations of repository and use case protocols, together with sample entities. They are used by previews and tests.
-Depends on: `Domain`.
-
 ### DesignSystem
 
 The visual foundation of the application and the widget.
@@ -58,7 +52,7 @@ Depends on: `Foundation` only.
 ### Features
 
 One package per feature. A feature package contains only presentation code: views, view models, routes, and outputs.
-Depends on: `Domain`, `DomainFakes`, `DesignSystem`.
+Depends on: `Domain`, `DesignSystem`.
 
 ### Application Target
 
@@ -73,25 +67,31 @@ Depends on: `SharedStorage`, `DesignSystem`.
 ## Dependency Graph
 
 ```
-                    Application
-     ┌──────────┬────────┼──────────┬──────────────┐
-     ▼          ▼        ▼          ▼              ▼
- Features   DomainFakes Data   DesignSystem   SharedStorage
-     │          │        │                         ▲
-     │          │        └─────────────────────────┤
-     ▼          ▼        ▼                         │
-   ────────── Domain ──────────                    │
-                                                   │
- Widget ──▶ DesignSystem, SharedStorage ───────────┘
+                 Application
+     ┌──────────┬──────┴──────┬──────────────┐
+     ▼          ▼             ▼              ▼
+ Features      Data     DesignSystem   SharedStorage
+     │          │                            ▲
+     │          └────────────────────────────┤
+     ▼          ▼                            │
+   ───────── Domain ─────────                │
+                                             │
+ Widget ──▶ DesignSystem, SharedStorage ─────┘
 ```
 
 ## Package Boundaries
 
 - Only the application target imports `Data`.
 - Feature packages never import other feature packages.
-- Feature packages reference `DomainFakes` only inside `#Preview` blocks.
 - The widget extension never imports `Domain`, `Data`, or any feature.
 - `DesignSystem` and `SharedStorage` never import `Domain`.
+
+## Fakes
+
+Fake implementations are not shared through a package.
+
+- A test target declares the fakes it needs next to its tests as `private` types.
+- A preview that needs a use case uses a `private` type declared in the same file as the screen.
 
 ## Access Control
 
@@ -101,7 +101,7 @@ Depends on: `SharedStorage`, `DesignSystem`.
 ## Actor Isolation
 
 - `DesignSystem` and all feature packages use `MainActor` as their default isolation.
-- `Domain`, `DomainFakes`, `Data`, and `SharedStorage` use the default `nonisolated` setting.
+- `Domain`, `Data`, and `SharedStorage` use the default `nonisolated` setting.
 
 ## Third-Party Dependencies
 
@@ -174,18 +174,17 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../Domain"),
-        .package(path: "../../DomainFakes"),
         .package(path: "../../DesignSystem"),
     ],
     targets: [
         .target(
             name: "MessageFeature",
-            dependencies: ["Domain", "DomainFakes", "DesignSystem"],
+            dependencies: ["Domain", "DesignSystem"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
         .testTarget(
             name: "MessageFeatureTests",
-            dependencies: ["MessageFeature", "DomainFakes"]
+            dependencies: ["MessageFeature"]
         ),
     ]
 )
@@ -194,7 +193,7 @@ let package = Package(
 ## Adding a Feature
 
 1. Create the package in `Packages/Features/<Name>` with the `<Name>Feature` library.
-2. Declare dependencies on `Domain`, `DomainFakes`, and `DesignSystem`, and set `MainActor` as the default isolation.
+2. Declare dependencies on `Domain` and `DesignSystem`, and set `MainActor` as the default isolation.
 3. Add the `<Name>FeatureTests` test target.
 4. Add the package to the Xcode project and link the library to the application target.
 5. Add a factory method for the feature to `AppContainer`.

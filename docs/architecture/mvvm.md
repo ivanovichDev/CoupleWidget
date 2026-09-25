@@ -114,13 +114,13 @@ The application publishes the connection status to views through the `isOnline` 
 
 ### Previews
 
-Every screen has previews in light and dark appearance. Previews use fake use cases from the `DomainFakes` package, so they never access the network. Fakes are referenced only inside `#Preview` blocks.
+Every screen has previews in light and dark appearance. Previews never access the network. When a screen needs a use case, the preview uses a `private` fake declared at the bottom of the same file.
 
 ### Example
 
 ```swift
 import DesignSystem
-import DomainFakes
+import Domain
 import SwiftUI
 
 struct ComposeMessageView: View {
@@ -142,9 +142,15 @@ struct ComposeMessageView: View {
 
 #Preview {
     ComposeMessageView(model: ComposeMessageViewModel(
-        couple: .preview,
-        sendMessage: FakeSendMessageUseCase()
+        couple: CoupleID(rawValue: UUID()),
+        sendMessage: PreviewSendMessageUseCase()
     ))
+}
+
+private struct PreviewSendMessageUseCase: SendMessageUseCase {
+    func callAsFunction(_ text: String, to couple: CoupleID) async throws -> Message {
+        Message(id: UUID(), authorID: UserID(rawValue: UUID()), text: text, sentAt: .now)
+    }
 }
 ```
 
