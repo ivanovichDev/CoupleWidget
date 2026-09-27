@@ -33,9 +33,10 @@ struct RootView: View {
     private var rootView: some View {
         switch router.flow {
         case .launching:
-            ProgressView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background { AppBackground() }
+            Color.clear
+                .overlay { Image("AppSplachScreen") }
+                .clipped()
+                .ignoresSafeArea()
         case .signedOut:
             container.makeSignInFeature().view(for: .signIn, navigator: router.signInNavigator)
         case .unpaired:
