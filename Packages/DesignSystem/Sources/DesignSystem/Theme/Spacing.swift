@@ -1,9 +1,9 @@
 import CoreGraphics
 
 public enum Spacing {
-    public static let extraSmall: CGFloat = 4
-    public static let small: CGFloat = 8
-    public static let medium: CGFloat = 16
-    public static let large: CGFloat = 24
-    public static let extraLarge: CGFloat = 32
+    public static let space1: CGFloat = 4
+    public static let space2: CGFloat = 8
+    public static let space3: CGFloat = 12
+    public static let space4: CGFloat = 16
+    public static let space6: CGFloat = 24
 }

@@ -10,9 +10,9 @@ final class BirthdayViewModel {
 
     init(navigator: OnboardingNavigator, now: Date = .now, calendar: Calendar = .current) {
         self.navigator = navigator
-        let earliest = calendar.date(byAdding: .year, value: -100, to: now) ?? now
+        let earliest = calendar.date(from: DateComponents(year: 1940, month: 1, day: 1)) ?? now
         range = earliest...now
-        birthday = calendar.date(byAdding: .year, value: -20, to: now) ?? now
+        birthday = calendar.date(from: DateComponents(year: 1996, month: 5, day: 14)) ?? now
     }
 
     func submit() {

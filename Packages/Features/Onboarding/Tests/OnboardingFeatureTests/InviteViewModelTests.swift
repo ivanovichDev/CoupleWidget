@@ -5,35 +5,59 @@ import Testing
 
 @MainActor
 struct InviteViewModelTests {
-    @Test func successfulJoinReportsPairedCouple() async {
+    @Test func partnerCodeIsUppercasedTrimmedAndLimited() {
+        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))), navigator: NavigatorRecorder().navigator)
+
+        model.partnerCode = "ab c1 23xyz"
+        model.normalizePartnerCode()
+
+        #expect(model.partnerCode == "ABC123")
+    }
+
+    @Test func connectRequiresFullCode() async {
+        let recorder = NavigatorRecorder()
+        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))), navigator: recorder.navigator)
+        model.partnerCode = "ABC"
+
+        await model.connect()
+
+        #expect(!model.canConnect)
+        #expect(recorder.outputs.isEmpty)
+    }
+
+    @Test func successfulConnectReportsPairedCouple() async {
         let couple = CoupleID(rawValue: UUID())
         let recorder = NavigatorRecorder()
-        let model = InviteViewModel(
-            joinCouple: FakeJoinCoupleUseCase(result: .success(couple)),
-            navigator: recorder.navigator
-        )
-        model.inviteCode = "ABC123"
+        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(couple)), navigator: recorder.navigator)
+        model.partnerCode = "ABC123"
 
-        await model.join()
+        await model.connect()
 
         #expect(model.state == .idle)
         #expect(recorder.outputs == [.paired(couple)])
     }
 
-    @Test func invalidCodeShowsError() async {
+    @Test func invalidCodeSetsFailedState() async {
         let recorder = NavigatorRecorder()
         let model = InviteViewModel(
             joinCouple: FakeJoinCoupleUseCase(result: .failure(.invalidInviteCode)),
             navigator: recorder.navigator
         )
+        model.partnerCode = "ABC123"
 
-        await model.join()
+        await model.connect()
 
         guard case .failed = model.state else {
             Issue.record("Expected failed state, got \(model.state)")
             return
         }
         #expect(recorder.outputs.isEmpty)
+    }
+
+    @Test func ownCodeIsSplitWithMiddleDot() {
+        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))), navigator: NavigatorRecorder().navigator)
+
+        #expect(model.formattedOwnCode == "K7M·2QX")
     }
 }
 

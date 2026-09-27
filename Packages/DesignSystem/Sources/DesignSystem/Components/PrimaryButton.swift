@@ -1,6 +1,8 @@
 import SwiftUI
 
 public struct PrimaryButton: View {
+    @Environment(\.isEnabled) private var isEnabled
+
     private let title: String
     private let isLoading: Bool
     private let action: () -> Void
@@ -18,20 +20,29 @@ public struct PrimaryButton: View {
                     .opacity(isLoading ? 0 : 1)
                 if isLoading {
                     ProgressView()
+                        .tint(Palette.onRose)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, Spacing.small)
+            .font(Typography.headline)
+            .foregroundStyle(Palette.onRose)
+            .frame(maxWidth: .infinity, minHeight: 50)
+            .padding(.horizontal, Spacing.space6)
+            .background(Palette.roseStrong, in: .capsule)
+            .shadow(color: Palette.roseStrong.opacity(0.25), radius: 12, y: 8)
+            .opacity(isEnabled ? 1 : 0.45)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.plain)
         .disabled(isLoading)
     }
 }
 
 #Preview {
-    VStack(spacing: Spacing.medium) {
+    VStack(spacing: Spacing.space3) {
         PrimaryButton(title: "Continue") {}
+        PrimaryButton(title: "Connect") {}
+            .disabled(true)
         PrimaryButton(title: "Continue", isLoading: true) {}
     }
-    .padding()
+    .padding(Spacing.space4)
+    .background(Palette.bg)
 }

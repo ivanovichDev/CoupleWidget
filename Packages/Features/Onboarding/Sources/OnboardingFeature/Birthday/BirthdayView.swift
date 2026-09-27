@@ -10,29 +10,34 @@ struct BirthdayView: View {
 
     var body: some View {
         ScreenLayout(
-            title: String(localized: "When's your birthday?"),
-            subtitle: String(localized: "We'll remind your partner about it")
+            step: 2,
+            of: 3,
+            title: String(localized: "When’s your birthday?"),
+            subtitle: String(localized: "So your partner never misses your special day."),
+            contentSpacing: 39
         ) {
-            DatePicker(
-                String(localized: "Birthday"),
-                selection: $model.birthday,
-                in: model.range,
-                displayedComponents: .date
+            InlineDatePicker(
+                date: $model.birthday,
+                range: model.range,
+                calendar: mondayFirstCalendar,
+                tint: Palette.roseStrong
             )
-            .datePickerStyle(.wheel)
-            .labelsHidden()
-            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Spacing.space2)
+            .padding(.top, Spacing.space2)
+            .padding(.bottom, 14)
+            .glass(.card, in: .rect(cornerRadius: CornerRadius.container))
         } actions: {
             PrimaryButton(title: String(localized: "Continue"), action: model.submit)
         }
     }
+
+    private var mondayFirstCalendar: Calendar {
+        var calendar = Calendar.current
+        calendar.firstWeekday = 2
+        return calendar
+    }
 }
 
-#Preview("Light") {
+#Preview {
     BirthdayView(model: BirthdayViewModel(navigator: .preview))
-}
-
-#Preview("Dark") {
-    BirthdayView(model: BirthdayViewModel(navigator: .preview))
-        .preferredColorScheme(.dark)
 }

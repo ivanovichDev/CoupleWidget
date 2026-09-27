@@ -17,5 +17,9 @@ let package = Package(
             dependencies: ["Domain", "DesignSystem"],
             swiftSettings: [.defaultIsolation(MainActor.self)]
         ),
+        .testTarget(
+            name: "MainFeatureTests",
+            dependencies: ["MainFeature"]
+        ),
     ]
 )

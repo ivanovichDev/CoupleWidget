@@ -11,26 +11,44 @@ struct NameView: View {
 
     var body: some View {
         ScreenLayout(
-            title: String(localized: "What's your name?"),
-            subtitle: String(localized: "Your partner will see it on the widget")
+            step: 1,
+            of: 3,
+            title: String(localized: "What’s your name?"),
+            subtitle: String(localized: "Your partner will see it on every note."),
+            contentSpacing: 19
         ) {
-            InputField(String(localized: "Name"), text: $model.name, isFocused: $isFocused)
-                .textContentType(.givenName)
-                .submitLabel(.continue)
-                .onSubmit(model.submit)
+            WidgetCard {
+                Text(String(localized: "Good morning, sunshine. Coffee is on the stove."))
+                    .font(Typography.headline)
+                    .foregroundStyle(Palette.ink)
+            } footer: {
+                NoteAuthorLabel(author)
+                    .font(Typography.footnote)
+            }
+            .frame(height: 158)
+            .padding(.horizontal, 10)
+        } input: {
+            VStack(alignment: .leading, spacing: Spacing.space2) {
+                Text(String(localized: "Name"))
+                    .font(Typography.footnote)
+                    .foregroundStyle(Palette.inkMuted)
+                    .padding(.leading, 20)
+                InputField(String(localized: "Your name"), text: $model.name, isFocused: $isFocused)
+                    .textContentType(.givenName)
+                    .submitLabel(.done)
+            }
         } actions: {
             PrimaryButton(title: String(localized: "Continue"), action: model.submit)
                 .disabled(!model.canSubmit)
         }
-        .onAppear { isFocused = true }
+    }
+
+    private var author: String {
+        let name = model.canSubmit ? model.trimmedName : String(localized: "you")
+        return String(localized: "From \(name)")
     }
 }
 
-#Preview("Light") {
+#Preview {
     NameView(model: NameViewModel(navigator: .preview))
-}
-
-#Preview("Dark") {
-    NameView(model: NameViewModel(navigator: .preview))
-        .preferredColorScheme(.dark)
 }

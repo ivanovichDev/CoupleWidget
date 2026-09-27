@@ -8,8 +8,13 @@ public struct OnboardingFeature {
         self.joinCouple = joinCouple
     }
 
-    @ViewBuilder
     public func view(for route: OnboardingRoute, navigator: OnboardingNavigator) -> some View {
+        screen(for: route, navigator: navigator)
+            .navigationBarBackButtonHidden()
+    }
+
+    @ViewBuilder
+    private func screen(for route: OnboardingRoute, navigator: OnboardingNavigator) -> some View {
         switch route {
         case .name:
             NameView(model: NameViewModel(navigator: navigator))

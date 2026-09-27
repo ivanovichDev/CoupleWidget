@@ -1,10 +1,11 @@
 import DesignSystem
 import Domain
 import SwiftUI
+import UIKit
 
 struct InviteView: View {
     @State private var model: InviteViewModel
-    @FocusState private var isFocused: Bool
+    @FocusState private var isCodeFocused: Bool
 
     init(model: InviteViewModel) {
         _model = State(initialValue: model)
@@ -12,34 +13,66 @@ struct InviteView: View {
 
     var body: some View {
         ScreenLayout(
-            title: String(localized: "Invite your partner"),
-            subtitle: String(localized: "Enter the invite code your partner shared with you")
+            step: 3,
+            of: 3,
+            title: String(localized: "Invite or connect"),
+            subtitle: String(localized: "Share your code with your partner, or enter the code they sent you."),
+            contentSpacing: 29
         ) {
-            VStack(alignment: .leading, spacing: Spacing.small) {
-                InputField(String(localized: "Invite code"), text: $model.inviteCode, isFocused: $isFocused)
-                    .textInputAutocapitalization(.characters)
-                    .autocorrectionDisabled()
-                if case .failed(let message) = model.state {
-                    Text(message)
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                }
+            VStack(spacing: 25) {
+                codeCard
+                WaitingStatus()
             }
         } actions: {
-            PrimaryButton(title: String(localized: "Join"), isLoading: model.state == .joining) {
-                Task { await model.join() }
+            PrimaryButton(title: String(localized: "Connect"), isLoading: model.state == .connecting) {
+                Task { await model.connect() }
             }
+            .disabled(!model.canConnect)
         }
+    }
+
+    private var codeCard: some View {
+        VStack(spacing: 0) {
+            SectionLabel(String(localized: "Your code"))
+            Text(model.formattedOwnCode)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .tracking(5)
+                .monospacedDigit()
+                .foregroundStyle(Palette.ink)
+                .padding(.top, Spacing.space2)
+                .accessibilityLabel(String(localized: "Your code \(model.ownCode.map(String.init).joined(separator: " "))"))
+            HStack(spacing: Spacing.space2) {
+                SecondaryButton(
+                    title: model.isCodeCopied ? String(localized: "Copied") : String(localized: "Copy"),
+                    systemImage: "doc.on.doc"
+                ) {
+                    UIPasteboard.general.string = model.ownCode
+                    model.codeCopied()
+                }
+                SecondaryButton(title: String(localized: "Share"), systemImage: "square.and.arrow.up") {}
+            }
+            .padding(.top, Spacing.space3)
+            OrDivider()
+                .padding(.top, Spacing.space4)
+            SectionLabel(String(localized: "Partner’s code"))
+                .padding(.top, Spacing.space3)
+            CodeField(
+                placeholder: String(localized: "Enter 6 characters"),
+                text: $model.partnerCode,
+                isFocused: $isCodeFocused
+            )
+            .submitLabel(.done)
+            .onChange(of: model.partnerCode) { model.normalizePartnerCode() }
+            .padding(.top, Spacing.space2)
+        }
+        .padding(20)
+        .frame(maxWidth: .infinity)
+        .glass(.card, in: .rect(cornerRadius: CornerRadius.container))
     }
 }
 
-#Preview("Light") {
+#Preview {
     InviteView(model: InviteViewModel(joinCouple: PreviewJoinCoupleUseCase(), navigator: .preview))
-}
-
-#Preview("Dark") {
-    InviteView(model: InviteViewModel(joinCouple: PreviewJoinCoupleUseCase(), navigator: .preview))
-        .preferredColorScheme(.dark)
 }
 
 private struct PreviewJoinCoupleUseCase: JoinCoupleUseCase {

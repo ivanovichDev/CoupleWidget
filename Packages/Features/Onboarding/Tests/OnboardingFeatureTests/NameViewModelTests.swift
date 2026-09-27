@@ -23,4 +23,12 @@ struct NameViewModelTests {
 
         #expect(recorder.routes == [.birthday])
     }
+
+    @Test func nameIsLimitedToMaxLength() {
+        let model = NameViewModel(navigator: NavigatorRecorder().navigator)
+
+        model.name = String(repeating: "a", count: 30)
+
+        #expect(model.name.count == NameViewModel.maxLength)
+    }
 }

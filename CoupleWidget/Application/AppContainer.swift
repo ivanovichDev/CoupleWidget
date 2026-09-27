@@ -15,7 +15,7 @@ final class AppContainer {
             supabaseURL: configuration.supabaseURL,
             supabaseKey: configuration.supabaseKey
         )
-        coupleRepository = SupabaseCoupleRepository(client: supabase)
+        coupleRepository = TemporaryCoupleRepository()
         joinCouple = AppJoinCoupleUseCase(repository: coupleRepository)
     }
 

@@ -4,10 +4,12 @@ import Testing
 
 @MainActor
 struct BirthdayViewModelTests {
-    @Test func birthdayCannotBeInTheFuture() {
+    @Test func rangeStartsIn1940AndEndsToday() {
+        let calendar = Calendar(identifier: .gregorian)
         let now = Date(timeIntervalSince1970: 1_800_000_000)
-        let model = BirthdayViewModel(navigator: NavigatorRecorder().navigator, now: now)
+        let model = BirthdayViewModel(navigator: NavigatorRecorder().navigator, now: now, calendar: calendar)
 
+        #expect(calendar.component(.year, from: model.range.lowerBound) == 1940)
         #expect(model.range.upperBound == now)
         #expect(model.range.contains(model.birthday))
     }

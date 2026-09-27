@@ -3,10 +3,22 @@ import Observation
 
 @Observable
 final class NameViewModel {
-    var name = ""
+    static let maxLength = 24
+
+    var name = "" {
+        didSet {
+            if name.count > Self.maxLength {
+                name = String(name.prefix(Self.maxLength))
+            }
+        }
+    }
+
+    var trimmedName: String {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 
     var canSubmit: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !trimmedName.isEmpty
     }
 
     private let navigator: OnboardingNavigator

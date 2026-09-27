@@ -1,3 +1,4 @@
+import DesignSystem
 import MainFeature
 import OnboardingFeature
 import SignInFeature
@@ -22,6 +23,8 @@ struct RootView: View {
                     }
                 }
         }
+        .tint(Palette.roseStrong)
+        .preferredColorScheme(.light)
         .animation(.default, value: router.flow)
         .task { router.start() }
     }
@@ -31,6 +34,8 @@ struct RootView: View {
         switch router.flow {
         case .launching:
             ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background { AppBackground() }
         case .signedOut:
             container.makeSignInFeature().view(for: .signIn, navigator: router.signInNavigator)
         case .unpaired:
