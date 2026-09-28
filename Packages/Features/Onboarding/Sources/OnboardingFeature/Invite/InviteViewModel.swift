@@ -12,7 +12,7 @@ final class InviteViewModel {
 
     static let codeLength = 6
 
-    let ownCode = "K7M2QX"
+    let ownCode: String
     private(set) var isCodeCopied = false
     private(set) var state: State = .idle
 
@@ -30,7 +30,8 @@ final class InviteViewModel {
     private let joinCouple: JoinCoupleUseCase
     private let navigator: OnboardingNavigator
 
-    init(joinCouple: JoinCoupleUseCase, navigator: OnboardingNavigator) {
+    init(pairingCode: String, joinCouple: JoinCoupleUseCase, navigator: OnboardingNavigator) {
+        ownCode = pairingCode
         self.joinCouple = joinCouple
         self.navigator = navigator
     }

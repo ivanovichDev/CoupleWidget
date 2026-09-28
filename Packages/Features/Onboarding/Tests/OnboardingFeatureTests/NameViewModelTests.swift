@@ -16,14 +16,14 @@ struct NameViewModelTests {
     }
 
     @Test
-    func validNameOpensBirthday() {
+    func validNameOpensBirthdayWithTrimmedName() {
         let recorder = NavigatorRecorder()
         let model = NameViewModel(navigator: recorder.navigator)
-        model.name = "Alex"
+        model.name = "  Alex Smith "
 
         model.submit()
 
-        #expect(recorder.routes == [.birthday])
+        #expect(recorder.routes == [.birthday(name: "Alex Smith")])
     }
 
     @Test

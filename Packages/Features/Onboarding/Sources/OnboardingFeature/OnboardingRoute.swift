@@ -1,5 +1,5 @@
 public enum OnboardingRoute: Hashable {
     case name
-    case birthday
-    case invite
+    case birthday(name: String)
+    case invite(pairingCode: String)
 }

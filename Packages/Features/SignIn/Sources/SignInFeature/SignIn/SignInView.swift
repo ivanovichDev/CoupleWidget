@@ -1,4 +1,6 @@
 import DesignSystem
+import Domain
+import Foundation
 import SwiftUI
 
 struct SignInView: View {
@@ -26,7 +28,9 @@ struct SignInView: View {
                 .padding(.horizontal, Spacing.space4)
                 .padding(.bottom, 11)
                 VStack(spacing: Spacing.space4) {
-                    SignInWithAppleButton(action: model.signIn)
+                    SignInWithAppleButton {
+                        Task { await model.signIn() }
+                    }
                     TermsText()
                 }
             }
@@ -36,5 +40,11 @@ struct SignInView: View {
 }
 
 #Preview {
-    SignInView(model: SignInViewModel(navigator: .preview))
+    SignInView(model: SignInViewModel(signInWithApple: PreviewSignInWithAppleUseCase(), navigator: .preview))
+}
+
+private struct PreviewSignInWithAppleUseCase: SignInWithAppleUseCase {
+    func callAsFunction() async throws -> UserID {
+        UserID(rawValue: UUID())
+    }
 }

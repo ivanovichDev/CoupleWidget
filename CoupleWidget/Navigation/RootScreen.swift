@@ -1,8 +1,9 @@
 import Domain
+import OnboardingFeature
 
 enum RootScreen: Equatable {
     case splash
     case signIn
-    case onboarding
+    case onboarding(OnboardingRoute)
     case home(CoupleID)
 }

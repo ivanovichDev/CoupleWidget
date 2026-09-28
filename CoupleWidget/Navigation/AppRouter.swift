@@ -1,3 +1,4 @@
+import Domain
 import MainFeature
 import Observation
 import OnboardingFeature
@@ -9,9 +10,15 @@ final class AppRouter {
     private(set) var rootScreen: RootScreen = .splash
     var path = NavigationPath()
 
-    func start() {
+    private let sessionState: SessionStateUseCase
+
+    init(sessionState: SessionStateUseCase) {
+        self.sessionState = sessionState
+    }
+
+    func start() async {
         guard rootScreen == .splash else { return }
-        setRootScreen(.signIn)
+        await showCurrentSession()
     }
 
     func push(_ route: SignInRoute) {
@@ -34,7 +41,7 @@ final class AppRouter {
     func handle(_ output: SignInOutput) {
         switch output {
         case .signedIn:
-            setRootScreen(.onboarding)
+            Task { await showCurrentSession() }
         }
     }
 
@@ -66,6 +73,21 @@ final class AppRouter {
             push: { [weak self] in self?.push($0) },
             dismiss: { [weak self] in self?.dismiss() }
         )
+    }
+
+    private func showCurrentSession() async {
+        do {
+            switch try await sessionState() {
+            case .signedOut:
+                setRootScreen(.signIn)
+            case .profileIncomplete:
+                setRootScreen(.onboarding(.name))
+            case .profileComplete(let profile):
+                setRootScreen(.onboarding(.invite(pairingCode: profile.pairingCode)))
+            }
+        } catch {
+            setRootScreen(.signIn)
+        }
     }
 
     private func setRootScreen(_ rootScreen: RootScreen) {

@@ -5,3 +5,6 @@ build/
 .build/
 .swiftpm/
 *.xcuserstate
+
+Configurations/Staging.xcconfig
+Configurations/Production.xcconfig

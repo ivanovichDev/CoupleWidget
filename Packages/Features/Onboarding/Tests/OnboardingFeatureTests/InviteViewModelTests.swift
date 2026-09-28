@@ -8,6 +8,7 @@ struct InviteViewModelTests {
     @Test
     func partnerCodeIsUppercasedTrimmedAndLimited() {
         let model = InviteViewModel(
+            pairingCode: "K7M2QX",
             joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))),
             navigator: NavigatorRecorder().navigator
         )
@@ -22,6 +23,7 @@ struct InviteViewModelTests {
     func connectRequiresFullCode() async {
         let recorder = NavigatorRecorder()
         let model = InviteViewModel(
+            pairingCode: "K7M2QX",
             joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))),
             navigator: recorder.navigator
         )
@@ -38,6 +40,7 @@ struct InviteViewModelTests {
         let couple = CoupleID(rawValue: UUID())
         let recorder = NavigatorRecorder()
         let model = InviteViewModel(
+            pairingCode: "K7M2QX",
             joinCouple: FakeJoinCoupleUseCase(result: .success(couple)),
             navigator: recorder.navigator
         )
@@ -53,6 +56,7 @@ struct InviteViewModelTests {
     func invalidCodeSetsFailedState() async {
         let recorder = NavigatorRecorder()
         let model = InviteViewModel(
+            pairingCode: "K7M2QX",
             joinCouple: FakeJoinCoupleUseCase(result: .failure(.invalidInviteCode)),
             navigator: recorder.navigator
         )
@@ -70,6 +74,7 @@ struct InviteViewModelTests {
     @Test
     func ownCodeIsSplitWithMiddleDot() {
         let model = InviteViewModel(
+            pairingCode: "K7M2QX",
             joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))),
             navigator: NavigatorRecorder().navigator
         )

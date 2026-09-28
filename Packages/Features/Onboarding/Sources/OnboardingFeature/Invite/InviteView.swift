@@ -43,7 +43,11 @@ struct InviteView: View {
 }
 
 #Preview {
-    InviteView(model: InviteViewModel(joinCouple: PreviewJoinCoupleUseCase(), navigator: .preview))
+    InviteView(model: InviteViewModel(
+        pairingCode: "K7M2QX",
+        joinCouple: PreviewJoinCoupleUseCase(),
+        navigator: .preview
+    ))
 }
 
 private struct PreviewJoinCoupleUseCase: JoinCoupleUseCase {

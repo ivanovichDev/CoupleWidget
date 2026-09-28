@@ -26,12 +26,18 @@ The screen at the base of the navigation stack is selected by `RootScreen`:
 enum RootScreen: Equatable {
     case splash
     case signIn
-    case onboarding
+    case onboarding(OnboardingRoute)
     case home(CoupleID)
 }
 ```
 
-The application starts with `splash`, which matches the launch screen. While it is shown, the router checks the session and couple state provided by Domain and selects the sign-in, onboarding, or home screen. Changing the root screen replaces the base of the stack and resets the navigation path, so no previous screens remain. Screens inside the current root screen are opened through feature routes.
+The application starts with `splash`, which matches the launch screen. While it is shown, the router asks `SessionStateUseCase` for the current state and selects the root screen:
+
+- without a session, the sign-in screen;
+- with a session and an incomplete profile, the name step of onboarding;
+- with a complete profile, the invite step of onboarding with the user's pairing code.
+
+After a successful sign-in the router performs the same check. Changing the root screen replaces the base of the stack and resets the navigation path, so no previous screens remain. Screens inside the current root screen are opened through feature routes.
 
 ## Feature Routes
 

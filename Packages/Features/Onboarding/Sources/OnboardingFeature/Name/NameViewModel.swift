@@ -29,6 +29,6 @@ final class NameViewModel {
 
     func submit() {
         guard canSubmit else { return }
-        navigator.push(.birthday)
+        navigator.push(.birthday(name: trimmedName))
     }
 }

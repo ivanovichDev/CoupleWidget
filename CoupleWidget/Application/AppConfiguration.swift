@@ -6,15 +6,17 @@ struct AppConfiguration {
 }
 
 extension AppConfiguration {
-    static let current = AppConfiguration(
-        supabaseURL: supabaseURL,
-        supabaseKey: "4f90d8ab59303b930b9093d2b3c54f7958b907e088ad3163"
-    )
+    static let current = AppConfiguration(bundle: .main)
 
-    private static var supabaseURL: URL {
-        guard let url = URL(string: "https://pfogwzatkqejybslfoes.supabase.co") else {
-            fatalError("Invalid Supabase URL")
+    init(bundle: Bundle) {
+        guard
+            let urlString = bundle.object(forInfoDictionaryKey: "SupabaseURL") as? String,
+            let url = URL(string: urlString),
+            let key = bundle.object(forInfoDictionaryKey: "SupabaseKey") as? String,
+            !key.isEmpty
+        else {
+            fatalError("Supabase configuration is missing from Info.plist")
         }
-        return url
+        self.init(supabaseURL: url, supabaseKey: key)
     }
 }

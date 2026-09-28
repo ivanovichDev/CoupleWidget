@@ -1,3 +1,4 @@
+import Domain
 import Foundation
 import Observation
 
@@ -5,17 +6,39 @@ import Observation
 final class BirthdayViewModel {
     var birthday: Date
     let range: ClosedRange<Date>
+    private(set) var isSaving = false
 
+    private let name: String
+    private let completeProfile: CompleteProfileUseCase
     private let navigator: OnboardingNavigator
+    private let calendar: Calendar
 
-    init(navigator: OnboardingNavigator, now: Date = .now, calendar: Calendar = .current) {
+    init(
+        name: String,
+        completeProfile: CompleteProfileUseCase,
+        navigator: OnboardingNavigator,
+        now: Date = .now,
+        calendar: Calendar = .current
+    ) {
+        self.name = name
+        self.completeProfile = completeProfile
         self.navigator = navigator
-        let earliest = calendar.date(from: DateComponents(year: 1940, month: 1, day: 1)) ?? now
-        range = earliest...now
-        birthday = calendar.date(from: DateComponents(year: 1996, month: 5, day: 14)) ?? now
+        self.calendar = calendar
+        range = BirthDate.allowedRange(now: now, calendar: calendar)
+        let suggested = calendar.date(from: DateComponents(year: 1996, month: 5, day: 14)) ?? range.upperBound
+        birthday = min(max(suggested, range.lowerBound), range.upperBound)
     }
 
-    func submit() {
-        navigator.push(.invite)
+    func submit() async {
+        guard !isSaving else { return }
+        isSaving = true
+        defer { isSaving = false }
+        do {
+            let birthDate = BirthDate(date: birthday, calendar: calendar)
+            let profile = try await completeProfile(name: name, birthDate: birthDate)
+            navigator.push(.invite(pairingCode: profile.pairingCode))
+        } catch {
+            return
+        }
     }
 }

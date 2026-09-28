@@ -45,6 +45,7 @@ Domain is a single package organized by business area. Each area keeps its entit
 Domain/Sources/Domain/
     Common/
     Session/
+    Profile/
     Couple/
     Message/
     Connectivity/
@@ -156,6 +157,7 @@ Data is a single package that mirrors the business areas of Domain.
 Data/Sources/Data/
     Supabase/
     Session/
+    Profile/
     Couple/
     Message/
     Connectivity/

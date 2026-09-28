@@ -1,4 +1,6 @@
 import DesignSystem
+import Domain
+import Foundation
 import SwiftUI
 
 struct BirthdayView: View {
@@ -33,11 +35,23 @@ struct BirthdayView: View {
             .padding(.bottom, 14)
             .glass(.card, in: .rect(cornerRadius: CornerRadius.container))
         } actions: {
-            PrimaryButton(title: String(localized: "Continue"), action: model.submit)
+            PrimaryButton(title: String(localized: "Continue"), isLoading: model.isSaving) {
+                Task { await model.submit() }
+            }
         }
     }
 }
 
 #Preview {
-    BirthdayView(model: BirthdayViewModel(navigator: .preview))
+    BirthdayView(model: BirthdayViewModel(
+        name: "Alex",
+        completeProfile: PreviewCompleteProfileUseCase(),
+        navigator: .preview
+    ))
+}
+
+private struct PreviewCompleteProfileUseCase: CompleteProfileUseCase {
+    func callAsFunction(name: String, birthDate: BirthDate) async throws -> Profile {
+        Profile(id: UserID(rawValue: UUID()), name: name, birthDate: birthDate, pairingCode: "K7M2QX")
+    }
 }

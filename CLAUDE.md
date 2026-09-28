@@ -10,15 +10,19 @@ Love Tunnel is an iOS app for couples. Partners send each other short notes that
 - `Packages/DesignSystem` holds colors, typography, spacing, and shared components.
 - `Packages/Features/` contains one package per feature with presentation code only.
 - `Tools/ViewStyleLint` is the SwiftSyntax checker for SwiftUI views.
+- `Configurations/` holds the Staging and Production configuration files.
+- `supabase/` holds the local Supabase configuration and the database migrations.
 
 Layers, packages, MVVM, and navigation are described in [docs/architecture](docs/architecture/README.md). Read the relevant document before changing a layer, a package boundary, a view model, or navigation.
+
+Environments, build configurations, schemes, and the local Supabase stack are described in [docs/environments.md](docs/environments.md).
 
 ## Build and Test
 
 Build the application:
 
 ```bash
-xcodebuild -project CoupleWidget.xcodeproj -scheme CoupleWidget -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
+xcodebuild -project CoupleWidget.xcodeproj -scheme 'CoupleWidget (Staging)' -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
 The packages are iOS only, so `swift test` does not work for them. Run their tests from the package directory with the package scheme:
