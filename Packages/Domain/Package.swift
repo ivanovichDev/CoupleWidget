@@ -5,10 +5,10 @@ let package = Package(
     name: "Domain",
     platforms: [.iOS(.v26)],
     products: [
-        .library(name: "Domain", targets: ["Domain"]),
+        .library(name: "Domain", targets: ["Domain"])
     ],
     targets: [
         .target(name: "Domain"),
-        .testTarget(name: "DomainTests", dependencies: ["Domain"]),
+        .testTarget(name: "DomainTests", dependencies: ["Domain"])
     ]
 )

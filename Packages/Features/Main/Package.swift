@@ -5,11 +5,11 @@ let package = Package(
     name: "MainFeature",
     platforms: [.iOS(.v26)],
     products: [
-        .library(name: "MainFeature", targets: ["MainFeature"]),
+        .library(name: "MainFeature", targets: ["MainFeature"])
     ],
     dependencies: [
         .package(path: "../../Domain"),
-        .package(path: "../../DesignSystem"),
+        .package(path: "../../DesignSystem")
     ],
     targets: [
         .target(
@@ -20,6 +20,6 @@ let package = Package(
         .testTarget(
             name: "MainFeatureTests",
             dependencies: ["MainFeature"]
-        ),
+        )
     ]
 )

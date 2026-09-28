@@ -2,7 +2,8 @@ import DesignSystem
 import SwiftUI
 
 struct WaitingStatus: View {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.accessibilityReduceMotion)
+    private var reduceMotion
     @State private var isPulsing = false
 
     var body: some View {

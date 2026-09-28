@@ -5,8 +5,12 @@ import Testing
 
 @MainActor
 struct InviteViewModelTests {
-    @Test func partnerCodeIsUppercasedTrimmedAndLimited() {
-        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))), navigator: NavigatorRecorder().navigator)
+    @Test
+    func partnerCodeIsUppercasedTrimmedAndLimited() {
+        let model = InviteViewModel(
+            joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))),
+            navigator: NavigatorRecorder().navigator
+        )
 
         model.partnerCode = "ab c1 23xyz"
         model.normalizePartnerCode()
@@ -14,9 +18,13 @@ struct InviteViewModelTests {
         #expect(model.partnerCode == "ABC123")
     }
 
-    @Test func connectRequiresFullCode() async {
+    @Test
+    func connectRequiresFullCode() async {
         let recorder = NavigatorRecorder()
-        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))), navigator: recorder.navigator)
+        let model = InviteViewModel(
+            joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))),
+            navigator: recorder.navigator
+        )
         model.partnerCode = "ABC"
 
         await model.connect()
@@ -25,10 +33,14 @@ struct InviteViewModelTests {
         #expect(recorder.outputs.isEmpty)
     }
 
-    @Test func successfulConnectReportsPairedCouple() async {
+    @Test
+    func successfulConnectReportsPairedCouple() async {
         let couple = CoupleID(rawValue: UUID())
         let recorder = NavigatorRecorder()
-        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(couple)), navigator: recorder.navigator)
+        let model = InviteViewModel(
+            joinCouple: FakeJoinCoupleUseCase(result: .success(couple)),
+            navigator: recorder.navigator
+        )
         model.partnerCode = "ABC123"
 
         await model.connect()
@@ -37,7 +49,8 @@ struct InviteViewModelTests {
         #expect(recorder.outputs == [.paired(couple)])
     }
 
-    @Test func invalidCodeSetsFailedState() async {
+    @Test
+    func invalidCodeSetsFailedState() async {
         let recorder = NavigatorRecorder()
         let model = InviteViewModel(
             joinCouple: FakeJoinCoupleUseCase(result: .failure(.invalidInviteCode)),
@@ -54,8 +67,12 @@ struct InviteViewModelTests {
         #expect(recorder.outputs.isEmpty)
     }
 
-    @Test func ownCodeIsSplitWithMiddleDot() {
-        let model = InviteViewModel(joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))), navigator: NavigatorRecorder().navigator)
+    @Test
+    func ownCodeIsSplitWithMiddleDot() {
+        let model = InviteViewModel(
+            joinCouple: FakeJoinCoupleUseCase(result: .success(CoupleID(rawValue: UUID()))),
+            navigator: NavigatorRecorder().navigator
+        )
 
         #expect(model.formattedOwnCode == "K7M·2QX")
     }

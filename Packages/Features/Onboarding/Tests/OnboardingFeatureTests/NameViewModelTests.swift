@@ -3,7 +3,8 @@ import Testing
 
 @MainActor
 struct NameViewModelTests {
-    @Test func blankNameDoesNotContinue() {
+    @Test
+    func blankNameDoesNotContinue() {
         let recorder = NavigatorRecorder()
         let model = NameViewModel(navigator: recorder.navigator)
         model.name = "   "
@@ -14,7 +15,8 @@ struct NameViewModelTests {
         #expect(recorder.routes.isEmpty)
     }
 
-    @Test func validNameOpensBirthday() {
+    @Test
+    func validNameOpensBirthday() {
         let recorder = NavigatorRecorder()
         let model = NameViewModel(navigator: recorder.navigator)
         model.name = "Alex"
@@ -24,7 +26,8 @@ struct NameViewModelTests {
         #expect(recorder.routes == [.birthday])
     }
 
-    @Test func nameIsLimitedToMaxLength() {
+    @Test
+    func nameIsLimitedToMaxLength() {
         let model = NameViewModel(navigator: NavigatorRecorder().navigator)
 
         model.name = String(repeating: "a", count: 30)

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+files=$(git diff --cached --name-only --diff-filter=ACMR -- '*.swift')
+[ -z "$files" ] && exit 0
+
+if ! command -v swiftlint >/dev/null 2>&1; then
+    echo "SwiftLint is not installed. Install it with: brew install swiftlint"
+    exit 1
+fi
+
+echo "$files" | tr '\n' '\0' | xargs -0 swiftlint lint --strict --quiet --force-exclude

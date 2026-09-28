@@ -8,6 +8,12 @@ struct BirthdayView: View {
         _model = State(initialValue: model)
     }
 
+    private var mondayFirstCalendar: Calendar {
+        var calendar = Calendar.current
+        calendar.firstWeekday = 2
+        return calendar
+    }
+
     var body: some View {
         ScreenLayout(
             step: 2,
@@ -29,12 +35,6 @@ struct BirthdayView: View {
         } actions: {
             PrimaryButton(title: String(localized: "Continue"), action: model.submit)
         }
-    }
-
-    private var mondayFirstCalendar: Calendar {
-        var calendar = Calendar.current
-        calendar.firstWeekday = 2
-        return calendar
     }
 }
 

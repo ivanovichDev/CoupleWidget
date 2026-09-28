@@ -1,7 +1,8 @@
 import SwiftUI
 
 public struct PrimaryButton: View {
-    @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.isEnabled)
+    private var isEnabled
 
     private let title: String
     private let isLoading: Bool
@@ -44,5 +45,5 @@ public struct PrimaryButton: View {
         PrimaryButton(title: "Continue", isLoading: true) {}
     }
     .padding(Spacing.space4)
-    .background(Palette.bg)
+    .background(Palette.background)
 }

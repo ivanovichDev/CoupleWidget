@@ -6,6 +6,12 @@ struct CodeField: View {
     @Binding var text: String
     var isFocused: FocusState<Bool>.Binding
 
+    private var prompt: Text {
+        Text(placeholder)
+            .font(Typography.body)
+            .foregroundStyle(Palette.inkMuted)
+    }
+
     var body: some View {
         TextField(text: $text, prompt: prompt) {
             Text(placeholder)
@@ -29,11 +35,5 @@ struct CodeField: View {
         }
         .contentShape(.capsule)
         .onTapGesture { isFocused.wrappedValue = true }
-    }
-
-    private var prompt: Text {
-        Text(placeholder)
-            .font(Typography.body)
-            .foregroundStyle(Palette.inkMuted)
     }
 }

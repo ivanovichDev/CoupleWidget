@@ -5,7 +5,8 @@ import Testing
 
 @MainActor
 struct HomeViewModelTests {
-    @Test func blankDraftCannotBeSent() {
+    @Test
+    func blankDraftCannotBeSent() {
         let model = makeModel()
         model.draft = "   \n"
 
@@ -15,7 +16,8 @@ struct HomeViewModelTests {
         #expect(model.draft == "   \n")
     }
 
-    @Test func sendingClearsDraft() {
+    @Test
+    func sendingClearsDraft() {
         let model = makeModel()
         model.draft = "  Miss you  "
 
@@ -24,7 +26,8 @@ struct HomeViewModelTests {
         #expect(model.draft.isEmpty)
     }
 
-    @Test func draftIsLimitedToMaxLength() {
+    @Test
+    func draftIsLimitedToMaxLength() {
         let model = makeModel()
         model.draft = String(repeating: "a", count: 200)
 
@@ -43,16 +46,24 @@ struct HomeViewModelTests {
 
 @MainActor
 struct HomeViewModelLineBreakTests {
-    @Test func lineBreaksAreRemovedAndReported() {
-        let model = HomeViewModel(couple: CoupleID(rawValue: UUID()), navigator: MainNavigator(push: { _ in }, dismiss: {}))
+    @Test
+    func lineBreaksAreRemovedAndReported() {
+        let model = HomeViewModel(
+            couple: CoupleID(rawValue: UUID()),
+            navigator: MainNavigator(push: { _ in }, dismiss: {})
+        )
         model.draft = "Miss you\n"
 
         #expect(model.removeLineBreaks())
         #expect(model.draft == "Miss you")
     }
 
-    @Test func draftWithoutLineBreaksIsUntouched() {
-        let model = HomeViewModel(couple: CoupleID(rawValue: UUID()), navigator: MainNavigator(push: { _ in }, dismiss: {}))
+    @Test
+    func draftWithoutLineBreaksIsUntouched() {
+        let model = HomeViewModel(
+            couple: CoupleID(rawValue: UUID()),
+            navigator: MainNavigator(push: { _ in }, dismiss: {})
+        )
         model.draft = "Miss you"
 
         #expect(!model.removeLineBreaks())
@@ -62,8 +73,12 @@ struct HomeViewModelLineBreakTests {
 
 @MainActor
 struct HomeViewModelQuickNoteTests {
-    @Test func pickingQuickNoteReplacesDraft() {
-        let model = HomeViewModel(couple: CoupleID(rawValue: UUID()), navigator: MainNavigator(push: { _ in }, dismiss: {}))
+    @Test
+    func pickingQuickNoteReplacesDraft() {
+        let model = HomeViewModel(
+            couple: CoupleID(rawValue: UUID()),
+            navigator: MainNavigator(push: { _ in }, dismiss: {})
+        )
         model.draft = "Hello"
 
         model.pickQuickNote("Miss you")

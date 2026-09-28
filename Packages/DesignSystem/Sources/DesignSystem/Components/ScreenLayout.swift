@@ -31,29 +31,21 @@ public struct ScreenLayout<Content: View, Input: View, Actions: View>: View {
     }
 
     public var body: some View {
-        column
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .dismissesKeyboardOnTap()
-            .ignoresKeyboardLayout()
-            .ignoresSafeArea(.keyboard)
-            .background { AppBackground() }
-    }
-
-    private var column: some View {
-        VStack(spacing: 0) {
-            StepIndicator(current: step, total: totalSteps)
-                .padding(.top, 30)
-            ScreenHeader(title: title, subtitle: subtitle)
-                .padding(.top, 23)
-            content
-                .padding(.top, contentSpacing)
-            Spacer(minLength: Spacing.space4)
-            input
-                .liftsAboveKeyboard()
-            actions
-                .padding(.top, Input.self == EmptyView.self ? 0 : Spacing.space3)
-        }
-        .padding(.horizontal, Spacing.space4)
+        ScreenLayoutColumn(
+            step: step,
+            totalSteps: totalSteps,
+            title: title,
+            subtitle: subtitle,
+            contentSpacing: contentSpacing,
+            content: content,
+            input: input,
+            actions: actions
+        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .dismissesKeyboardOnTap()
+        .ignoresKeyboardLayout()
+        .ignoresSafeArea(.keyboard)
+        .background { AppBackground() }
     }
 }
 

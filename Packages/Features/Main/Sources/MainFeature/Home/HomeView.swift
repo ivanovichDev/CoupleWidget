@@ -11,6 +11,15 @@ struct HomeView: View {
         _model = State(initialValue: model)
     }
 
+    private var stageScale: CGFloat {
+        guard isComposerFocused else { return 1 }
+        switch composerLineCount {
+        case 1: return 0.72
+        case 2: return 0.66
+        default: return 0.55
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             WidgetCarousel(text: model.trimmedDraft, scale: stageScale, selection: $model.selectedWidget)
@@ -27,15 +36,18 @@ struct HomeView: View {
                     isFocused: $isComposerFocused,
                     lineCount: $composerLineCount,
                     maxLength: HomeViewModel.maxNoteLength,
-                    canSend: model.canSend,
-                    send: send
-                )
+                    canSend: model.canSend
+                ) {
+                    withAnimation { model.send() }
+                }
                 .onChange(of: model.draft) {
                     if model.removeLineBreaks() {
                         isComposerFocused = false
                     }
                     model.limitDraft()
                 }
+                .onChange(of: isComposerFocused) { model.isComposerFocused = isComposerFocused }
+                .onChange(of: model.isComposerFocused) { isComposerFocused = model.isComposerFocused }
                 .padding(.horizontal, Spacing.space4)
             }
             .liftsAboveKeyboard(spacing: Spacing.space2)
@@ -45,20 +57,6 @@ struct HomeView: View {
         .ignoresKeyboardLayout()
         .ignoresSafeArea(.keyboard)
         .background { AppBackground() }
-    }
-
-    private var stageScale: CGFloat {
-        guard isComposerFocused else { return 1 }
-        switch composerLineCount {
-        case 1: return 0.72
-        case 2: return 0.66
-        default: return 0.55
-        }
-    }
-
-    private func send() {
-        isComposerFocused = false
-        withAnimation { model.send() }
     }
 }
 

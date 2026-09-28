@@ -31,5 +31,5 @@ public struct NoteCard: View {
         NoteCard(text: "Can’t wait for tonight, I got the tickets", author: "You", time: "Yesterday")
     }
     .padding(Spacing.space4)
-    .background(Palette.bg)
+    .background(Palette.background)
 }

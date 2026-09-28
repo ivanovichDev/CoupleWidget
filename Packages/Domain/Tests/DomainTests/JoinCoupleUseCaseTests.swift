@@ -3,7 +3,8 @@ import Foundation
 import Testing
 
 struct JoinCoupleUseCaseTests {
-    @Test func trimsInviteCodeBeforeJoining() async throws {
+    @Test
+    func trimsInviteCodeBeforeJoining() async throws {
         let repository = RecordingCoupleRepository()
         let useCase = AppJoinCoupleUseCase(repository: repository)
 
@@ -12,7 +13,8 @@ struct JoinCoupleUseCaseTests {
         #expect(await repository.receivedCodes == ["ABC123"])
     }
 
-    @Test func rejectsEmptyInviteCode() async {
+    @Test
+    func rejectsEmptyInviteCode() async {
         let useCase = AppJoinCoupleUseCase(repository: RecordingCoupleRepository())
 
         await #expect(throws: CoupleError.invalidInviteCode) {

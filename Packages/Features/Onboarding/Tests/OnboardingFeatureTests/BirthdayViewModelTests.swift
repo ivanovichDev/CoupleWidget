@@ -4,7 +4,8 @@ import Testing
 
 @MainActor
 struct BirthdayViewModelTests {
-    @Test func rangeStartsIn1940AndEndsToday() {
+    @Test
+    func rangeStartsIn1940AndEndsToday() {
         let calendar = Calendar(identifier: .gregorian)
         let now = Date(timeIntervalSince1970: 1_800_000_000)
         let model = BirthdayViewModel(navigator: NavigatorRecorder().navigator, now: now, calendar: calendar)
@@ -14,7 +15,8 @@ struct BirthdayViewModelTests {
         #expect(model.range.contains(model.birthday))
     }
 
-    @Test func submitOpensInvite() {
+    @Test
+    func submitOpensInvite() {
         let recorder = NavigatorRecorder()
         let model = BirthdayViewModel(navigator: recorder.navigator)
 

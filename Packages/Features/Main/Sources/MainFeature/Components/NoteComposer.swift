@@ -35,7 +35,11 @@ struct NoteComposer: View {
                 .lineLimit(1...4)
                 .submitLabel(.done)
                 .focused(isFocused)
-                .onGeometryChange(for: Int.self, of: { max(1, Int(($0.size.height / 22).rounded())) }) { lineCount = $0 }
+                .onGeometryChange(for: Int.self) { proxy in
+                    max(1, Int((proxy.size.height / 22).rounded()))
+                } action: { count in
+                    lineCount = count
+                }
                 .padding(.vertical, 11)
                 SendButton(partnerName: partnerName, isEnabled: canSend, action: send)
             }
@@ -43,26 +47,5 @@ struct NoteComposer: View {
             .padding([.top, .bottom, .trailing], 6)
             .glass(.field, in: .rect(cornerRadius: 28))
         }
-    }
-}
-
-private struct SendButton: View {
-    let partnerName: String
-    let isEnabled: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: "arrow.up")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(Palette.onRose)
-                .frame(width: 44, height: 44)
-                .background(Palette.roseStrong, in: .circle)
-                .shadow(color: Palette.roseStrong.opacity(0.25), radius: 12, y: 8)
-                .opacity(isEnabled ? 1 : 0.45)
-        }
-        .buttonStyle(.plain)
-        .disabled(!isEnabled)
-        .accessibilityLabel(String(localized: "Send to \(partnerName)'s widget"))
     }
 }

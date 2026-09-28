@@ -9,10 +9,17 @@ private struct KeyboardLift: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onGeometryChange(for: CGFloat.self, of: { $0.frame(in: .global).maxY }) { bottom = $0 }
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.frame(in: .global).maxY
+            } action: { maxY in
+                bottom = maxY
+            }
             .offset(y: -lift)
-            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)) { notification in
-                guard let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+            .onReceive(
+                NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)
+            ) { notification in
+                let endFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+                guard let frame = endFrame as? CGRect else { return }
                 withAnimation(.easeOut(duration: 0.25)) {
                     keyboardTop = frame.minY
                 }

@@ -10,7 +10,7 @@ struct RootView: View {
 
     var body: some View {
         NavigationStack(path: $router.path) {
-            rootView
+            FlowRootView(container: container, router: router)
                 .navigationDestination(for: SignInRoute.self) { route in
                     container.makeSignInFeature().view(for: route, navigator: router.signInNavigator)
                 }
@@ -27,22 +27,5 @@ struct RootView: View {
         .preferredColorScheme(.light)
         .animation(.default, value: router.flow)
         .task { router.start() }
-    }
-
-    @ViewBuilder
-    private var rootView: some View {
-        switch router.flow {
-        case .launching:
-            Color.clear
-                .overlay { Image("AppSplachScreen") }
-                .clipped()
-                .ignoresSafeArea()
-        case .signedOut:
-            container.makeSignInFeature().view(for: .signIn, navigator: router.signInNavigator)
-        case .unpaired:
-            container.makeOnboardingFeature().view(for: .name, navigator: router.onboardingNavigator)
-        case .paired(let couple):
-            container.makeMainFeature(couple: couple).view(for: .home, navigator: router.mainNavigator)
-        }
     }
 }

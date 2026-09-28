@@ -9,6 +9,11 @@ struct NameView: View {
         _model = State(initialValue: model)
     }
 
+    private var author: String {
+        let name = model.canSubmit ? model.trimmedName : String(localized: "you")
+        return String(localized: "From \(name)")
+    }
+
     var body: some View {
         ScreenLayout(
             step: 1,
@@ -41,11 +46,6 @@ struct NameView: View {
             PrimaryButton(title: String(localized: "Continue"), action: model.submit)
                 .disabled(!model.canSubmit)
         }
-    }
-
-    private var author: String {
-        let name = model.canSubmit ? model.trimmedName : String(localized: "you")
-        return String(localized: "From \(name)")
     }
 }
 

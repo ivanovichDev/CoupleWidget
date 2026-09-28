@@ -13,12 +13,13 @@ final class HomeViewModel {
         String(localized: "On my way home"),
         String(localized: "Proud of you"),
         String(localized: "Coffee later?"),
-        String(localized: "Sweet dreams"),
+        String(localized: "Sweet dreams")
     ]
 
     let couple: CoupleID
     let partnerName = "Anna"
     var draft = ""
+    var isComposerFocused = false
     var selectedWidget: WidgetSize? = .small
 
     var trimmedDraft: String {
@@ -53,6 +54,7 @@ final class HomeViewModel {
     }
 
     func send() {
+        isComposerFocused = false
         guard canSend else { return }
         draft = ""
     }
