@@ -43,6 +43,8 @@
 		0C1450B20004306672A30056B3AE /* SignIn */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SignIn; sourceTree = "<group>"; };
 		0C1450B20005306672A30056B3AE /* Onboarding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Onboarding; sourceTree = "<group>"; };
 		0C1450B20006306672A30056B3AE /* Main */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Main; sourceTree = "<group>"; };
+		0C144EA3306672A10056B3AE /* ViewStyleLint */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ViewStyleLint; sourceTree = "<group>"; };
+		0C144EA4306672A10056B3AE /* xcode-lint.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "xcode-lint.sh"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -113,6 +115,7 @@
 			children = (
 				0C144E72306672A10056B3AE /* CoupleWidget */,
 				0C1450B20007306672A30056B3AE /* Packages */,
+				0C144EA2306672A10056B3AE /* Tools */,
 				0C144E80306672A10056B3AE /* CoupleWidgetTests */,
 				0C144E8A306672A20056B3AE /* CoupleWidgetUITests */,
 				0C144E71306672A10056B3AE /* Products */,
@@ -150,6 +153,15 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		0C144EA2306672A10056B3AE /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				0C144EA3306672A10056B3AE /* ViewStyleLint */,
+				0C144EA4306672A10056B3AE /* xcode-lint.sh */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -157,6 +169,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0C144E91306672A20056B3AE /* Build configuration list for PBXNativeTarget "CoupleWidget" */;
 			buildPhases = (
+				0C144EA1306672A10056B3AE /* Lint */,
 				0C144E6C306672A10056B3AE /* Sources */,
 				0C144E6D306672A10056B3AE /* Frameworks */,
 				0C144E6E306672A10056B3AE /* Resources */,
@@ -298,6 +311,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0C144EA1306672A10056B3AE /* Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Lint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/Tools/xcode-lint.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0C144E6C306672A10056B3AE /* Sources */ = {
@@ -461,6 +497,7 @@
 		0C144E92306672A20056B3AE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -495,6 +532,7 @@
 		0C144E93306672A20056B3AE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
