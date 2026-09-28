@@ -31,13 +31,21 @@ struct InviteView: View {
                     model.codeCopied()
                 }
                 .onChange(of: model.partnerCode) { model.normalizePartnerCode() }
-                WaitingStatus()
+                VStack(spacing: Spacing.space2) {
+                    WaitingStatus()
+                    AlreadyPairedButton(isChecking: model.state == .checking) {
+                        Task { await model.checkPairing() }
+                    }
+                }
             }
         } actions: {
             PrimaryButton(title: String(localized: "Connect"), isLoading: model.state == .connecting) {
                 Task { await model.connect() }
             }
             .disabled(!model.canConnect)
+        }
+        .alert(model.alertMessage ?? "", isPresented: $model.isAlertPresented) {
+            Button(String(localized: "OK")) {}
         }
     }
 }
@@ -46,6 +54,7 @@ struct InviteView: View {
     InviteView(model: InviteViewModel(
         pairingCode: "K7M2QX",
         joinCouple: PreviewJoinCoupleUseCase(),
+        currentCouple: PreviewCurrentCoupleUseCase(),
         navigator: .preview
     ))
 }
@@ -53,5 +62,11 @@ struct InviteView: View {
 private struct PreviewJoinCoupleUseCase: JoinCoupleUseCase {
     func callAsFunction(inviteCode: String) async throws -> CoupleID {
         CoupleID(rawValue: UUID())
+    }
+}
+
+private struct PreviewCurrentCoupleUseCase: CurrentCoupleUseCase {
+    func callAsFunction() async throws -> CoupleID? {
+        nil
     }
 }

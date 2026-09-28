@@ -15,6 +15,7 @@ final class AppContainer {
     private let signInWithApple: SignInWithAppleUseCase
     private let completeProfile: CompleteProfileUseCase
     private let joinCouple: JoinCoupleUseCase
+    private let currentCouple: CurrentCoupleUseCase
 
     init(configuration: AppConfiguration) {
         supabase = SupabaseClient(
@@ -24,14 +25,16 @@ final class AppContainer {
         )
         sessionRepository = SupabaseSessionRepository(client: supabase)
         profileRepository = SupabaseProfileRepository(client: supabase)
-        coupleRepository = TemporaryCoupleRepository()
+        coupleRepository = SupabaseCoupleRepository(client: supabase)
         sessionState = AppSessionStateUseCase(
             sessionRepository: sessionRepository,
-            profileRepository: profileRepository
+            profileRepository: profileRepository,
+            coupleRepository: coupleRepository
         )
         signInWithApple = AppSignInWithAppleUseCase(repository: sessionRepository)
         completeProfile = AppCompleteProfileUseCase(repository: profileRepository)
         joinCouple = AppJoinCoupleUseCase(repository: coupleRepository)
+        currentCouple = AppCurrentCoupleUseCase(repository: coupleRepository)
     }
 
     func makeSignInFeature() -> SignInFeature {
@@ -39,7 +42,7 @@ final class AppContainer {
     }
 
     func makeOnboardingFeature() -> OnboardingFeature {
-        OnboardingFeature(completeProfile: completeProfile, joinCouple: joinCouple)
+        OnboardingFeature(completeProfile: completeProfile, joinCouple: joinCouple, currentCouple: currentCouple)
     }
 
     func makeMainFeature(couple: CoupleID) -> MainFeature {

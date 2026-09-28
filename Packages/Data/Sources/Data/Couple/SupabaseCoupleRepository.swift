@@ -16,6 +16,24 @@ public final class SupabaseCoupleRepository: CoupleRepository {
                 .execute()
                 .value
             return CoupleID(rawValue: id)
+        } catch let error as PostgrestError {
+            throw CoupleError(joinError: error) ?? CommonError(error)
+        } catch {
+            throw CommonError(error)
+        }
+    }
+
+    public func currentCouple() async throws -> CoupleID? {
+        do {
+            let userID = try await client.auth.session.user.id
+            let members: [CoupleMemberDTO] = try await client
+                .from("couple_members")
+                .select("couple_id")
+                .eq("user_id", value: userID)
+                .limit(1)
+                .execute()
+                .value
+            return members.first.map { CoupleID(rawValue: $0.coupleId) }
         } catch {
             throw CommonError(error)
         }

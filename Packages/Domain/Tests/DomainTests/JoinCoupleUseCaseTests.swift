@@ -30,4 +30,8 @@ private actor RecordingCoupleRepository: CoupleRepository {
         receivedCodes.append(inviteCode)
         return CoupleID(rawValue: UUID())
     }
+
+    func currentCouple() async throws -> CoupleID? {
+        nil
+    }
 }

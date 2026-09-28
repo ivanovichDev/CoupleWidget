@@ -82,8 +82,10 @@ final class AppRouter {
                 setRootScreen(.signIn)
             case .profileIncomplete:
                 setRootScreen(.onboarding(.name))
-            case .profileComplete(let profile):
+            case .unpaired(let profile):
                 setRootScreen(.onboarding(.invite(pairingCode: profile.pairingCode)))
+            case .paired(let couple):
+                setRootScreen(.home(couple))
             }
         } catch {
             setRootScreen(.signIn)

@@ -35,7 +35,8 @@ The application starts with `splash`, which matches the launch screen. While it 
 
 - without a session, the sign-in screen;
 - with a session and an incomplete profile, the name step of onboarding;
-- with a complete profile, the invite step of onboarding with the user's pairing code.
+- with a complete profile and no couple, the invite step of onboarding with the user's pairing code;
+- with a couple, the home screen.
 
 After a successful sign-in the router performs the same check. Changing the root screen replaces the base of the stack and resets the navigation path, so no previous screens remain. Screens inside the current root screen are opened through feature routes.
 

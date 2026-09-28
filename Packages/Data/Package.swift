@@ -19,6 +19,12 @@ let package = Package(
                 .product(name: "Supabase", package: "supabase-swift")
             ]
         ),
-        .testTarget(name: "DataTests", dependencies: ["Data"])
+        .testTarget(
+            name: "DataTests",
+            dependencies: [
+                "Data",
+                .product(name: "Supabase", package: "supabase-swift")
+            ]
+        )
     ]
 )
