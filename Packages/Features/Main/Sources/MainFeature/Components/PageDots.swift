@@ -6,7 +6,7 @@ struct PageDots: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(WidgetSize.allCases, id: \.self) { size in
+            ForEach(WidgetSize.allCases) { size in
                 Button {
                     withAnimation { selection = size }
                 } label: {

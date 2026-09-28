@@ -1,21 +1,21 @@
 import SwiftUI
 
 struct NoteWall: View {
-    @State private var images: [Image] = []
+    @State private var images: [NoteWallRow.ID: Image] = [:]
     @State private var isRunning = false
     @Environment(\.accessibilityReduceMotion)
     private var reduceMotion
     @Environment(\.displayScale)
     private var displayScale
 
-    private let blurredRows = 3..<NoteWallRow.all.count
+    private let blurredRows = Array(NoteWallRow.all.dropFirst(3))
 
     var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .topLeading) {
-                NoteWallRows(indices: NoteWallRow.all.indices, images: images, isRunning: isRunning)
+                NoteWallRows(rows: NoteWallRow.all, images: images, isRunning: isRunning)
                 ProgressiveBlur(size: proxy.size) {
-                    NoteWallRows(indices: blurredRows, images: images, isRunning: isRunning)
+                    NoteWallRows(rows: blurredRows, images: images, isRunning: isRunning)
                 }
             }
         }

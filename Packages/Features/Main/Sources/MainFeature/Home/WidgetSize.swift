@@ -2,10 +2,12 @@ import CoreGraphics
 import DesignSystem
 import SwiftUI
 
-enum WidgetSize: CaseIterable, Hashable {
+enum WidgetSize: CaseIterable, Hashable, Identifiable {
     case small
     case medium
     case large
+
+    var id: Self { self }
 
     var name: String {
         switch self {

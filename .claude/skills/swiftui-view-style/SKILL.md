@@ -83,6 +83,14 @@ Members of a view are declared in this order:
 8. Computed properties.
 9. `body`, always the last member.
 
+## ForEach Identity
+
+Every element of a `ForEach` has a stable identity that belongs to the element itself.
+
+- The element type conforms to `Identifiable`, or the `ForEach` passes a key path to a stable, unique property, for example `id: \.id`.
+- The position of an element is never its identity. `ForEach(items.indices, id: \.self)` and `ForEach(Array(items.enumerated()), id: \.offset)` are not used.
+- An identity is not derived from content that can change, such as the text of a note.
+
 ## Enforcement
 
 SwiftLint and the view style checker in `Tools/ViewStyleLint` run after every edit made by Claude Code and before every commit. The checker reports a second view in a file, a file named differently from its view, members other than `body` that return a view, methods, and members out of order.

@@ -1,21 +1,15 @@
 import SwiftUI
 
 struct NoteWallRows: View {
-    let indices: Range<Int>
-    let images: [Image]
+    let rows: [NoteWallRow]
+    let images: [NoteWallRow.ID: Image]
     let isRunning: Bool
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            if images.count == NoteWallRow.all.count {
-                ForEach(indices, id: \.self) { index in
-                    NoteWallRowView(
-                        row: NoteWallRow.all[index],
-                        image: images[index],
-                        duration: NoteWallRow.durations[index % NoteWallRow.durations.count],
-                        movesLeft: index.isMultiple(of: 2),
-                        isRunning: isRunning
-                    )
+            ForEach(rows) { row in
+                if let image = images[row.id] {
+                    NoteWallRowView(row: row, image: image, isRunning: isRunning)
                 }
             }
         }

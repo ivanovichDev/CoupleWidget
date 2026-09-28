@@ -81,7 +81,7 @@ struct HomeViewModelQuickNoteTests {
         )
         model.draft = "Hello"
 
-        model.pickQuickNote("Miss you")
+        model.pickQuickNote(QuickNote(text: "Miss you"))
 
         #expect(model.draft == "Miss you")
     }

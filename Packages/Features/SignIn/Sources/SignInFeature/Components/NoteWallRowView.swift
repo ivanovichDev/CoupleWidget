@@ -3,12 +3,10 @@ import SwiftUI
 struct NoteWallRowView: View {
     let row: NoteWallRow
     let image: Image
-    let duration: Double
-    let movesLeft: Bool
     let isRunning: Bool
 
-    private var start: CGFloat { movesLeft ? 0 : -row.loopWidth }
-    private var end: CGFloat { movesLeft ? -row.loopWidth : 0 }
+    private var start: CGFloat { row.movesLeft ? 0 : -row.loopWidth }
+    private var end: CGFloat { row.movesLeft ? -row.loopWidth : 0 }
 
     var body: some View {
         image
@@ -17,7 +15,7 @@ struct NoteWallRowView: View {
                 y: row.top - NoteWallRowContent.inset
             )
             .animation(
-                isRunning ? .linear(duration: duration).repeatForever(autoreverses: false) : nil,
+                isRunning ? .linear(duration: row.duration).repeatForever(autoreverses: false) : nil,
                 value: isRunning
             )
     }

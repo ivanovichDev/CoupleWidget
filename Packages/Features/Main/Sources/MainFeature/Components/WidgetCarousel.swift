@@ -14,7 +14,7 @@ struct WidgetCarousel: View {
         VStack(spacing: 0) {
             ScrollView(.horizontal) {
                 HStack(spacing: 0) {
-                    ForEach(WidgetSize.allCases, id: \.self) { size in
+                    ForEach(WidgetSize.allCases) { size in
                         WidgetPreview(size: size, text: text)
                             .offset(y: Self.dotInset / 2)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)

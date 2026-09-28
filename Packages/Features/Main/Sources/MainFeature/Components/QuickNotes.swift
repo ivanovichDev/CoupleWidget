@@ -2,15 +2,15 @@ import DesignSystem
 import SwiftUI
 
 struct QuickNotes: View {
-    let notes: [String]
+    let notes: [QuickNote]
     let selected: String
-    let pick: (String) -> Void
+    let pick: (QuickNote) -> Void
 
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: Spacing.space2) {
-                ForEach(notes, id: \.self) { note in
-                    QuickNoteChip(title: note, isSelected: note == selected) {
+                ForEach(notes) { note in
+                    QuickNoteChip(title: note.text, isSelected: note.text == selected) {
                         pick(note)
                     }
                 }

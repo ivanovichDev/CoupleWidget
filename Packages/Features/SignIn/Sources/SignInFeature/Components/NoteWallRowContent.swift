@@ -7,10 +7,8 @@ struct NoteWallRowContent: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(Array((row.notes + row.notes).enumerated()), id: \.offset) { _, note in
-                NoteWallTile(note: note)
-                    .padding(.trailing, 14)
-            }
+            NoteWallStrip(notes: row.notes)
+            NoteWallStrip(notes: row.notes)
         }
         .padding(Self.inset)
     }

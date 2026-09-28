@@ -7,13 +7,13 @@ final class HomeViewModel {
     static let maxNoteLength = 140
 
     let quickNotes = [
-        String(localized: "Good morning, love"),
-        String(localized: "Miss you"),
-        String(localized: "Thinking of you"),
-        String(localized: "On my way home"),
-        String(localized: "Proud of you"),
-        String(localized: "Coffee later?"),
-        String(localized: "Sweet dreams")
+        QuickNote(text: String(localized: "Good morning, love")),
+        QuickNote(text: String(localized: "Miss you")),
+        QuickNote(text: String(localized: "Thinking of you")),
+        QuickNote(text: String(localized: "On my way home")),
+        QuickNote(text: String(localized: "Proud of you")),
+        QuickNote(text: String(localized: "Coffee later?")),
+        QuickNote(text: String(localized: "Sweet dreams"))
     ]
 
     let couple: CoupleID
@@ -37,8 +37,8 @@ final class HomeViewModel {
         self.navigator = navigator
     }
 
-    func pickQuickNote(_ note: String) {
-        draft = note
+    func pickQuickNote(_ note: QuickNote) {
+        draft = note.text
     }
 
     func limitDraft() {
