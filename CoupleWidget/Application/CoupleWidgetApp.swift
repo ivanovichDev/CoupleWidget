@@ -1,3 +1,7 @@
+import DesignSystem
+import MainFeature
+import OnboardingFeature
+import SignInFeature
 import SwiftUI
 
 @main
@@ -7,7 +11,38 @@ struct CoupleWidgetApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView(container: container, router: router)
+            NavigationStack(path: $router.path) {
+                Group {
+                    switch router.rootScreen {
+                    case .splash:
+                        Color.clear
+                            .overlay { Image("AppSplachScreen") }
+                            .clipped()
+                            .ignoresSafeArea()
+                    case .signIn:
+                        container.makeSignInFeature().view(for: .signIn, navigator: router.signInNavigator)
+                    case .onboarding:
+                        container.makeOnboardingFeature().view(for: .name, navigator: router.onboardingNavigator)
+                    case .home(let couple):
+                        container.makeMainFeature(couple: couple).view(for: .home, navigator: router.mainNavigator)
+                    }
+                }
+                .navigationDestination(for: SignInRoute.self) { route in
+                    container.makeSignInFeature().view(for: route, navigator: router.signInNavigator)
+                }
+                .navigationDestination(for: OnboardingRoute.self) { route in
+                    container.makeOnboardingFeature().view(for: route, navigator: router.onboardingNavigator)
+                }
+                .navigationDestination(for: MainRoute.self) { route in
+                    if case .home(let couple) = router.rootScreen {
+                        container.makeMainFeature(couple: couple).view(for: route, navigator: router.mainNavigator)
+                    }
+                }
+            }
+            .tint(Palette.roseStrong)
+            .preferredColorScheme(.light)
+            .animation(.default, value: router.rootScreen)
+            .task { router.start() }
         }
     }
 }

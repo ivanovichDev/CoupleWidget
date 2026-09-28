@@ -8,4 +8,5 @@ if ! command -v swiftlint >/dev/null 2>&1; then
     exit 1
 fi
 
-echo "$files" | tr '\n' '\0' | xargs -0 swiftlint lint --strict --quiet --force-exclude
+echo "$files" | tr '\n' '\0' | xargs -0 swiftlint lint --strict --quiet --force-exclude || exit 1
+echo "$files" | tr '\n' '\0' | xargs -0 Tools/ViewStyleLint/lint.sh

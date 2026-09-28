@@ -6,12 +6,12 @@ import SwiftUI
 
 @Observable
 final class AppRouter {
-    private(set) var flow: AppFlow = .launching
+    private(set) var rootScreen: RootScreen = .splash
     var path = NavigationPath()
 
     func start() {
-        guard flow == .launching else { return }
-        show(.signedOut)
+        guard rootScreen == .splash else { return }
+        setRootScreen(.signIn)
     }
 
     func push(_ route: SignInRoute) {
@@ -34,14 +34,14 @@ final class AppRouter {
     func handle(_ output: SignInOutput) {
         switch output {
         case .signedIn:
-            show(.unpaired)
+            setRootScreen(.onboarding)
         }
     }
 
     func handle(_ output: OnboardingOutput) {
         switch output {
         case .paired(let couple):
-            show(.paired(couple))
+            setRootScreen(.home(couple))
         }
     }
 
@@ -68,8 +68,8 @@ final class AppRouter {
         )
     }
 
-    private func show(_ flow: AppFlow) {
+    private func setRootScreen(_ rootScreen: RootScreen) {
         path = NavigationPath()
-        self.flow = flow
+        self.rootScreen = rootScreen
     }
 }

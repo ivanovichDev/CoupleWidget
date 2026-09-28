@@ -4,8 +4,8 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var model: HomeViewModel
-    @FocusState private var isComposerFocused: Bool
     @State private var composerLineCount = 1
+    @FocusState private var isComposerFocused: Bool
 
     init(model: HomeViewModel) {
         _model = State(initialValue: model)

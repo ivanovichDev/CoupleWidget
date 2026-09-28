@@ -2,9 +2,9 @@ import DesignSystem
 import SwiftUI
 
 struct WaitingStatus: View {
+    @State private var isPulsing = false
     @Environment(\.accessibilityReduceMotion)
     private var reduceMotion
-    @State private var isPulsing = false
 
     var body: some View {
         HStack(spacing: Spacing.space2) {

@@ -64,7 +64,8 @@ Computed properties that return values such as `AttributedString`, `CGFloat`, or
 A view declares no methods. Logic that a view would otherwise keep in a method belongs to its view model.
 
 - A screen moves such logic into its own view model.
-- A component with logic of its own, such as rendering or starting an animation, gets its own `@Observable` view model, owned through `@State`.
+- A component keeps its purely visual state, such as prepared images or an animation flag, in `@State` and updates it from closures in `body`, such as `.onAppear`.
+- Work that is not layout, such as rendering views into images, lives in a separate type named after its role, for example `NoteWallRenderer` with a single `render` method.
 - Simple action closures passed to child views, such as `{ withAnimation { model.send() } }`, stay inline in `body`.
 - Focus state lives in the view as `@FocusState` and is mirrored into a plain property of the view model with two `onChange` modifiers when the view model needs to change it.
 
@@ -72,10 +73,19 @@ A view declares no methods. Logic that a view would otherwise keep in a method b
 
 Members of a view are declared in this order:
 
-1. Environment values, state, bindings, and stored properties.
-2. Initializers.
-3. Computed properties.
-4. `body`, always the last member.
+1. Static properties.
+2. Input properties: stored properties without an access modifier, `@Binding`, and `@Bindable`.
+3. `@State` properties.
+4. `@FocusState` properties.
+5. `@Environment` properties.
+6. Private stored properties.
+7. Initializers.
+8. Computed properties.
+9. `body`, always the last member.
+
+## Enforcement
+
+SwiftLint and the view style checker in `Tools/ViewStyleLint` run after every edit made by Claude Code and before every commit. The checker reports a second view in a file, a file named differently from its view, members other than `body` that return a view, methods, and members out of order.
 
 ## One View per File
 

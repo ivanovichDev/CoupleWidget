@@ -11,27 +11,27 @@ Feature ──output(Output)──▶ Router ──▶ another feature's Route
 
 `AppRouter` is an `@Observable` class in the application target. It owns the complete navigation state of the application:
 
-- the current application flow;
+- the current root screen;
 - the `NavigationPath` of the main navigation stack;
 - the currently presented sheet or full-screen cover;
 - the connection status.
 
 Only the router changes navigation state. Features request changes through their navigators.
 
-## Application Flow
+## Root Screen
 
-The root of the application is selected by `AppFlow`:
+The screen at the base of the navigation stack is selected by `RootScreen`:
 
 ```swift
-enum AppFlow: Equatable {
-    case launching
-    case signedOut
-    case unpaired
-    case paired(CoupleID)
+enum RootScreen: Equatable {
+    case splash
+    case signIn
+    case onboarding
+    case home(CoupleID)
 }
 ```
 
-The router derives the flow from the session and couple state provided by Domain. Each flow has its own root view. Changing the flow replaces the root view and resets the navigation path.
+The application starts with `splash`, which matches the launch screen. While it is shown, the router checks the session and couple state provided by Domain and selects the sign-in, onboarding, or home screen. Changing the root screen replaces the base of the stack and resets the navigation path, so no previous screens remain. Screens inside the current root screen are opened through feature routes.
 
 ## Feature Routes
 

@@ -1,8 +1,8 @@
 import SwiftUI
 
 public struct InputField: View {
-    private let placeholder: String
     @Binding private var text: String
+    private let placeholder: String
     private var isFocused: FocusState<Bool>.Binding
 
     public init(_ placeholder: String, text: Binding<String>, isFocused: FocusState<Bool>.Binding) {

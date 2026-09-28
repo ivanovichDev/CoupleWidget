@@ -6,9 +6,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/swiftlint.sh",
-            "timeout": 60,
-            "statusMessage": "Running SwiftLint"
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint.sh",
+            "timeout": 300,
+            "statusMessage": "Running SwiftLint and view style checks"
           }
         ]
       }
