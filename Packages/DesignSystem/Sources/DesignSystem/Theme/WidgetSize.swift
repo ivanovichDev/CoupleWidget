@@ -1,15 +1,14 @@
 import CoreGraphics
-import DesignSystem
 import SwiftUI
 
-enum WidgetSize: CaseIterable, Hashable, Identifiable {
+public enum WidgetSize: CaseIterable, Hashable, Identifiable, Sendable {
     case small
     case medium
     case large
 
-    var id: Self { self }
+    public var id: Self { self }
 
-    var name: String {
+    public var name: String {
         switch self {
         case .small: String(localized: "Small widget")
         case .medium: String(localized: "Medium widget")
@@ -17,7 +16,7 @@ enum WidgetSize: CaseIterable, Hashable, Identifiable {
         }
     }
 
-    var size: CGSize {
+    public var size: CGSize {
         switch self {
         case .small: CGSize(width: 158, height: 158)
         case .medium: CGSize(width: 338, height: 158)
@@ -25,7 +24,7 @@ enum WidgetSize: CaseIterable, Hashable, Identifiable {
         }
     }
 
-    var textFont: Font {
+    public var textFont: Font {
         switch self {
         case .small: Typography.subheadline.weight(.semibold)
         case .medium: Typography.headline
@@ -33,14 +32,14 @@ enum WidgetSize: CaseIterable, Hashable, Identifiable {
         }
     }
 
-    var footerFont: Font {
+    public var footerFont: Font {
         switch self {
         case .small: Font.caption
         case .medium, .large: Typography.footnote
         }
     }
 
-    var lineLimit: Int {
+    public var lineLimit: Int {
         switch self {
         case .small: 5
         case .medium: 4

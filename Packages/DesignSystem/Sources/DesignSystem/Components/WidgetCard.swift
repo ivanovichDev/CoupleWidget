@@ -19,13 +19,11 @@ public struct WidgetCard<Content: View, Footer: View>: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.space2) {
+        WidgetCardLayout(padding: padding) {
             content
-                .frame(maxWidth: .infinity, alignment: .leading)
-            Spacer(minLength: 0)
+        } footer: {
             footer
         }
-        .padding(padding)
         .glass(.card, in: .rect(cornerRadius: CornerRadius.widget), blursBackdrop: blursBackdrop)
     }
 }
