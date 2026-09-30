@@ -38,4 +38,16 @@ public final class SupabaseCoupleRepository: CoupleRepository {
             throw CommonError(error)
         }
     }
+
+    public func partnerName() async throws -> String {
+        do {
+            let name: String = try await client
+                .rpc("partner_name")
+                .execute()
+                .value
+            return name
+        } catch {
+            throw CommonError(error)
+        }
+    }
 }

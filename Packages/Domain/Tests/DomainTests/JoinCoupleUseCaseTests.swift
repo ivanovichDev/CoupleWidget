@@ -34,4 +34,7 @@ private actor RecordingCoupleRepository: CoupleRepository {
     func currentCouple() async throws -> CoupleID? {
         nil
     }
+    func partnerName() async throws -> String {
+        "Anna"
+    }
 }

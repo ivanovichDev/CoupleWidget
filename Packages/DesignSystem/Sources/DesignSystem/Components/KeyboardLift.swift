@@ -9,12 +9,15 @@ private struct KeyboardLift: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onGeometryChange(for: CGFloat.self) { proxy in
-                proxy.frame(in: .global).maxY
-            } action: { maxY in
-                bottom = maxY
-            }
             .offset(y: -lift)
+            .background {
+                Color.clear
+                    .onGeometryChange(for: CGFloat.self) { proxy in
+                        proxy.frame(in: .global).maxY
+                    } action: { maxY in
+                        bottom = maxY
+                    }
+            }
             .onReceive(
                 NotificationCenter.default.publisher(for: UIResponder.keyboardWillChangeFrameNotification)
             ) { notification in

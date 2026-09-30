@@ -85,4 +85,7 @@ private struct StubCoupleRepository: CoupleRepository {
     func currentCouple() async throws -> CoupleID? {
         couple
     }
+    func partnerName() async throws -> String {
+        "Anna"
+    }
 }

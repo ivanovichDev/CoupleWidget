@@ -5,5 +5,5 @@ enum RootScreen: Equatable {
     case splash
     case signIn
     case onboarding(OnboardingRoute)
-    case home(CoupleID)
+    case home(HomeSession)
 }

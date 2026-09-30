@@ -11,9 +11,13 @@ final class AppRouter {
     var path = NavigationPath()
 
     private let sessionState: SessionStateUseCase
+    private let partnerName: PartnerNameUseCase
+    private let messageQuota: MessageQuotaUseCase
 
-    init(sessionState: SessionStateUseCase) {
+    init(sessionState: SessionStateUseCase, partnerName: PartnerNameUseCase, messageQuota: MessageQuotaUseCase) {
         self.sessionState = sessionState
+        self.partnerName = partnerName
+        self.messageQuota = messageQuota
     }
 
     func start() async {
@@ -48,7 +52,7 @@ final class AppRouter {
     func handle(_ output: OnboardingOutput) {
         switch output {
         case .paired(let couple):
-            setRootScreen(.home(couple))
+            Task { await showHome(couple) }
         }
     }
 
@@ -85,11 +89,17 @@ final class AppRouter {
             case .unpaired(let profile):
                 setRootScreen(.onboarding(.invite(pairingCode: profile.pairingCode)))
             case .paired(let couple):
-                setRootScreen(.home(couple))
+                await showHome(couple)
             }
         } catch {
             setRootScreen(.signIn)
         }
+    }
+
+    private func showHome(_ couple: CoupleID) async {
+        async let name = try? partnerName()
+        async let quota = try? messageQuota()
+        setRootScreen(.home(HomeSession(couple: couple, partnerName: await name, quota: await quota)))
     }
 
     private func setRootScreen(_ rootScreen: RootScreen) {

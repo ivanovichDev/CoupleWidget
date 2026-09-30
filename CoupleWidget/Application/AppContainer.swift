@@ -8,16 +8,20 @@ import Supabase
 final class AppContainer {
     let sessionState: SessionStateUseCase
     let pushNotificationRegistrar: PushNotificationRegistrar
+    let partnerName: PartnerNameUseCase
+    let messageQuota: MessageQuotaUseCase
 
     private let supabase: SupabaseClient
     private let sessionRepository: SessionRepository
     private let profileRepository: ProfileRepository
     private let coupleRepository: CoupleRepository
     private let pushTokenRepository: PushTokenRepository
+    private let messageRepository: MessageRepository
     private let signInWithApple: SignInWithAppleUseCase
     private let completeProfile: CompleteProfileUseCase
     private let joinCouple: JoinCoupleUseCase
     private let currentCouple: CurrentCoupleUseCase
+    private let sendMessage: SendMessageUseCase
 
     init(configuration: AppConfiguration) {
         supabase = SupabaseClient(
@@ -29,6 +33,7 @@ final class AppContainer {
         profileRepository = SupabaseProfileRepository(client: supabase)
         coupleRepository = SupabaseCoupleRepository(client: supabase)
         pushTokenRepository = SupabasePushTokenRepository(client: supabase)
+        messageRepository = SupabaseMessageRepository(client: supabase)
         sessionState = AppSessionStateUseCase(
             sessionRepository: sessionRepository,
             profileRepository: profileRepository,
@@ -38,6 +43,9 @@ final class AppContainer {
         completeProfile = AppCompleteProfileUseCase(repository: profileRepository)
         joinCouple = AppJoinCoupleUseCase(repository: coupleRepository)
         currentCouple = AppCurrentCoupleUseCase(repository: coupleRepository)
+        partnerName = AppPartnerNameUseCase(repository: coupleRepository)
+        messageQuota = AppMessageQuotaUseCase(repository: messageRepository)
+        sendMessage = AppSendMessageUseCase(repository: messageRepository)
         pushNotificationRegistrar = PushNotificationRegistrar(
             registerPushToken: AppRegisterPushTokenUseCase(repository: pushTokenRepository)
         )
@@ -51,7 +59,14 @@ final class AppContainer {
         OnboardingFeature(completeProfile: completeProfile, joinCouple: joinCouple, currentCouple: currentCouple)
     }
 
-    func makeMainFeature(couple: CoupleID) -> MainFeature {
-        MainFeature(couple: couple)
+    func makeMainFeature(session: HomeSession) -> MainFeature {
+        MainFeature(
+            couple: session.couple,
+            partnerName: session.partnerName,
+            quota: session.quota,
+            messageQuota: messageQuota,
+            sendMessage: sendMessage,
+            loadPartnerName: partnerName
+        )
     }
 }

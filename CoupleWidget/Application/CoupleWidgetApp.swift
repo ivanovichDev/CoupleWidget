@@ -13,7 +13,11 @@ struct CoupleWidgetApp: App {
     init() {
         let container = AppContainer(configuration: .current)
         self.container = container
-        _router = State(initialValue: AppRouter(sessionState: container.sessionState))
+        _router = State(initialValue: AppRouter(
+            sessionState: container.sessionState,
+            partnerName: container.partnerName,
+            messageQuota: container.messageQuota
+        ))
     }
 
     var body: some Scene {
@@ -30,8 +34,8 @@ struct CoupleWidgetApp: App {
                         container.makeSignInFeature().view(for: .signIn, navigator: router.signInNavigator)
                     case .onboarding(let route):
                         container.makeOnboardingFeature().view(for: route, navigator: router.onboardingNavigator)
-                    case .home(let couple):
-                        container.makeMainFeature(couple: couple).view(for: .home, navigator: router.mainNavigator)
+                    case .home(let session):
+                        container.makeMainFeature(session: session).view(for: .home, navigator: router.mainNavigator)
                     }
                 }
                 .navigationDestination(for: SignInRoute.self) { route in
@@ -41,8 +45,8 @@ struct CoupleWidgetApp: App {
                     container.makeOnboardingFeature().view(for: route, navigator: router.onboardingNavigator)
                 }
                 .navigationDestination(for: MainRoute.self) { route in
-                    if case .home(let couple) = router.rootScreen {
-                        container.makeMainFeature(couple: couple).view(for: route, navigator: router.mainNavigator)
+                    if case .home(let session) = router.rootScreen {
+                        container.makeMainFeature(session: session).view(for: route, navigator: router.mainNavigator)
                     }
                 }
             }

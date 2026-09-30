@@ -33,3 +33,5 @@ Couples keep no history. When a member row is deleted, a trigger deletes the who
 ## Notes
 
 Every member of a couple has at most one note in `public.notes`, identified by the couple and the author. A new note replaces the previous one through an upsert. The partner reads the note of the other member, and only the author can write it. The database accepts up to 500 characters and updates `updated_at` on every change.
+
+The application writes the note with the `send_note` function, which finds the couple of the signed-in user and returns the updated quota described in [Plans and Usage](plans.md). The `partner_name` function returns the name of the other member of the couple.
