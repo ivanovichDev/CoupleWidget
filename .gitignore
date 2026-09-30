@@ -8,3 +8,5 @@ build/
 
 Configurations/Staging.xcconfig
 Configurations/Production.xcconfig
+
+supabase/functions/.env

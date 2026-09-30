@@ -6,6 +6,7 @@ import SwiftUI
 
 @main
 struct CoupleWidgetApp: App {
+    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @State private var router: AppRouter
     private let container: AppContainer
 
@@ -48,7 +49,15 @@ struct CoupleWidgetApp: App {
             .tint(Palette.roseStrong)
             .preferredColorScheme(.light)
             .animation(.default, value: router.rootScreen)
-            .task { await router.start() }
+            .task {
+                appDelegate.pushNotificationRegistrar = container.pushNotificationRegistrar
+                await router.start()
+            }
+            .task(id: router.rootScreen) {
+                if case .home = router.rootScreen {
+                    await container.pushNotificationRegistrar.requestAuthorization()
+                }
+            }
         }
     }
 }

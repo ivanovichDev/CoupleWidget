@@ -7,11 +7,13 @@ import Supabase
 
 final class AppContainer {
     let sessionState: SessionStateUseCase
+    let pushNotificationRegistrar: PushNotificationRegistrar
 
     private let supabase: SupabaseClient
     private let sessionRepository: SessionRepository
     private let profileRepository: ProfileRepository
     private let coupleRepository: CoupleRepository
+    private let pushTokenRepository: PushTokenRepository
     private let signInWithApple: SignInWithAppleUseCase
     private let completeProfile: CompleteProfileUseCase
     private let joinCouple: JoinCoupleUseCase
@@ -26,6 +28,7 @@ final class AppContainer {
         sessionRepository = SupabaseSessionRepository(client: supabase)
         profileRepository = SupabaseProfileRepository(client: supabase)
         coupleRepository = SupabaseCoupleRepository(client: supabase)
+        pushTokenRepository = SupabasePushTokenRepository(client: supabase)
         sessionState = AppSessionStateUseCase(
             sessionRepository: sessionRepository,
             profileRepository: profileRepository,
@@ -35,6 +38,9 @@ final class AppContainer {
         completeProfile = AppCompleteProfileUseCase(repository: profileRepository)
         joinCouple = AppJoinCoupleUseCase(repository: coupleRepository)
         currentCouple = AppCurrentCoupleUseCase(repository: coupleRepository)
+        pushNotificationRegistrar = PushNotificationRegistrar(
+            registerPushToken: AppRegisterPushTokenUseCase(repository: pushTokenRepository)
+        )
     }
 
     func makeSignInFeature() -> SignInFeature {

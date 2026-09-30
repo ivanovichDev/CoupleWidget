@@ -1,8 +1,11 @@
 import DesignSystem
+import NoteCache
 import SwiftUI
 import WidgetKit
 
 struct NoteWidgetView: View {
+    let note: CachedNote?
+
     @Environment(\.widgetFamily)
     private var family
 
@@ -16,12 +19,15 @@ struct NoteWidgetView: View {
 
     var body: some View {
         WidgetCardLayout {
-            Text(String(localized: "Your partner hasn't left any notes yet"))
+            Text(note?.text ?? String(localized: "Your partner hasn't left any notes yet"))
                 .font(size.textFont)
-                .foregroundStyle(Palette.inkMuted)
+                .foregroundStyle(note == nil ? Palette.inkMuted : Palette.ink)
                 .lineLimit(size.lineLimit)
         } footer: {
-            EmptyView()
+            if let note {
+                NoteAuthorLabel(String(localized: "From \(note.authorName)"))
+                    .font(size.footerFont)
+            }
         }
     }
 }
@@ -29,17 +35,20 @@ struct NoteWidgetView: View {
 #Preview(as: .systemSmall) {
     NoteWidget()
 } timeline: {
-    NoteEntry(date: .now)
+    NoteEntry(date: .now, note: nil)
+    NoteEntry(date: .now, note: CachedNote(authorName: "Anna", text: "Miss you", updatedAt: .now))
 }
 
 #Preview(as: .systemMedium) {
     NoteWidget()
 } timeline: {
-    NoteEntry(date: .now)
+    NoteEntry(date: .now, note: nil)
+    NoteEntry(date: .now, note: CachedNote(authorName: "Anna", text: "Miss you", updatedAt: .now))
 }
 
 #Preview(as: .systemLarge) {
     NoteWidget()
 } timeline: {
-    NoteEntry(date: .now)
+    NoteEntry(date: .now, note: nil)
+    NoteEntry(date: .now, note: CachedNote(authorName: "Anna", text: "Miss you", updatedAt: .now))
 }

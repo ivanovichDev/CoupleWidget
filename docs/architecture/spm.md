@@ -4,17 +4,18 @@ The layers and features of the application are split into local Swift packages. 
 
 ## Repository Structure
 
-The Xcode project contains only the application target and the widget extension. Every other piece of code lives in a local package.
+The Xcode project contains only the application target, the widget extension, and the notification service extension. Every other piece of code lives in a local package.
 
 ```
 CoupleWidget.xcodeproj
 CoupleWidget/
 CoupleWidgetWidget/
+CoupleWidgetNotificationService/
 Packages/
     Domain/
     Data/
     DesignSystem/
-    SharedStorage/
+    NoteCache/
     Features/
         <Name>/
 ```
@@ -31,7 +32,7 @@ Depends on: `Foundation` only.
 ### Data
 
 Repository implementations, data transfer objects, the Supabase client configuration, and the connectivity monitor.
-Depends on: `Domain`, `SharedStorage`, `Supabase`.
+Depends on: `Domain`, `Supabase`.
 
 ### DesignSystem
 
@@ -44,9 +45,9 @@ The visual foundation of the application and the widget.
 Components accept plain values and closures, never domain entities.
 Depends on: `SwiftUI` only.
 
-### SharedStorage
+### NoteCache
 
-Data shared between the application and the widget through the App Group container and the shared Keychain.
+The latest note of the partner, shared between the application, the widget, and the notification service extension through the App Group container. The note is stored as a versioned JSON file and is replaced only by a note with a newer `updated_at`. The package also keeps the WidgetKit push token that the widget passes to the application.
 Depends on: `Foundation` only.
 
 ### Features
@@ -61,8 +62,13 @@ Depends on: all packages.
 
 ### Widget Extension
 
-The widget timeline provider, the widget push handler, and the widget views.
-Depends on: `SharedStorage`, `DesignSystem`.
+The widget timeline provider, the widget push handler, and the widget views. The widget reads the latest note from `NoteCache` and stores its WidgetKit push token there.
+Depends on: `NoteCache`, `DesignSystem`.
+
+### Notification Service Extension
+
+Receives every note notification before it is shown, writes the note to `NoteCache`, and reloads the widget.
+Depends on: `NoteCache`.
 
 ## Dependency Graph
 
@@ -70,21 +76,22 @@ Depends on: `SharedStorage`, `DesignSystem`.
                  Application
      ┌──────────┬──────┴──────┬──────────────┐
      ▼          ▼             ▼              ▼
- Features      Data     DesignSystem   SharedStorage
-     │          │                            ▲
-     │          └────────────────────────────┤
-     ▼          ▼                            │
-   ───────── Domain ─────────                │
+ Features      Data     DesignSystem     NoteCache
+     │          │             ▲              ▲
+     ▼          ▼             │              │
+   ───────── Domain ───────   │              │
+                              │              │
+ Widget ──────────────────────┴──────────────┤
                                              │
- Widget ──▶ DesignSystem, SharedStorage ─────┘
+ Notification Service ───────────────────────┘
 ```
 
 ## Package Boundaries
 
 - Only the application target imports `Data`.
 - Feature packages never import other feature packages.
-- The widget extension never imports `Domain`, `Data`, or any feature.
-- `DesignSystem` and `SharedStorage` never import `Domain`.
+- The widget extension and the notification service extension never import `Domain`, `Data`, or any feature.
+- `DesignSystem` and `NoteCache` never import `Domain`.
 
 ## Fakes
 
@@ -101,7 +108,7 @@ Fake implementations are not shared through a package.
 ## Actor Isolation
 
 - `DesignSystem` and all feature packages use `MainActor` as their default isolation.
-- `Domain`, `Data`, and `SharedStorage` use the default `nonisolated` setting.
+- `Domain`, `Data`, and `NoteCache` use the default `nonisolated` setting.
 
 ## Third-Party Dependencies
 
@@ -143,7 +150,6 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../Domain"),
-        .package(path: "../SharedStorage"),
         .package(url: "https://github.com/supabase/supabase-swift", from: "2.0.0"),
     ],
     targets: [
@@ -151,7 +157,6 @@ let package = Package(
             name: "Data",
             dependencies: [
                 "Domain",
-                "SharedStorage",
                 .product(name: "Supabase", package: "supabase-swift"),
             ]
         ),

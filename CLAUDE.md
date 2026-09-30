@@ -8,14 +8,21 @@ Love Tunnel is an iOS app for couples. Partners send each other short notes that
 - `Packages/Domain` holds entities, use cases, and repository protocols.
 - `Packages/Data` implements the Domain protocols and is the only place that talks to Supabase.
 - `Packages/DesignSystem` holds colors, typography, spacing, and shared components.
+- `Packages/NoteCache` holds the latest note shared with the widget through the App Group.
 - `Packages/Features/` contains one package per feature with presentation code only.
+- `CoupleWidgetWidget/` is the Home Screen widget extension.
+- `CoupleWidgetNotificationService/` is the notification service extension that stores incoming notes for the widget.
 - `Tools/ViewStyleLint` is the SwiftSyntax checker for SwiftUI views.
 - `Configurations/` holds the Staging and Production configuration files.
-- `supabase/` holds the local Supabase configuration and the database migrations.
+- `supabase/` holds the local Supabase configuration, the database migrations, and the Edge Functions.
 
 Layers, packages, MVVM, and navigation are described in [docs/architecture](docs/architecture/README.md). Read the relevant document before changing a layer, a package boundary, a view model, or navigation.
 
 Environments, build configurations, schemes, and the local Supabase stack are described in [docs/environments.md](docs/environments.md).
+
+Note notifications, the notification service extension, and the widget cache are described in [docs/notifications.md](docs/notifications.md).
+
+The instant widget update pipeline is described in [docs/widget-updates.md](docs/widget-updates.md).
 
 ## Build and Test
 
