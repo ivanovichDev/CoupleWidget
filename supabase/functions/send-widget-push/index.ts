@@ -27,8 +27,8 @@ function requiredEnv(name: string): string {
 }
 
 function isAuthorized(request: Request): boolean {
-  const expected = new TextEncoder().encode(requiredEnv("NOTE_PUSH_SECRET"));
-  const received = new TextEncoder().encode(request.headers.get("X-Note-Push-Secret") ?? "");
+  const expected = new TextEncoder().encode(requiredEnv("SEND_WIDGET_PUSH_SECRET"));
+  const received = new TextEncoder().encode(request.headers.get("X-Send-Widget-Push-Secret") ?? "");
   if (expected.length !== received.length) {
     return false;
   }
@@ -112,7 +112,7 @@ async function clearToken(token: string) {
       "apikey": requiredEnv("SUPABASE_ANON_KEY"),
       "content-type": "application/json",
     },
-    body: JSON.stringify({ widget_token: token, push_secret: requiredEnv("NOTE_PUSH_SECRET") }),
+    body: JSON.stringify({ widget_token: token, push_secret: requiredEnv("SEND_WIDGET_PUSH_SECRET") }),
   });
 }
 

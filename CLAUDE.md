@@ -21,7 +21,7 @@ Environments, build configurations, schemes, and the local Supabase stack are de
 
 Profiles, couples, and notes in the database are described in [docs/database.md](docs/database.md).
 
-WidgetKit pushes, push tokens, and the widget cache are described in [docs/notifications.md](docs/notifications.md).
+WidgetKit pushes, push tokens, and the widget cache are described in [docs/widget-pushes.md](docs/widget-pushes.md).
 
 The widget update pipeline is described in [docs/widget-updates.md](docs/widget-updates.md).
 

@@ -8,19 +8,19 @@ The widget shows a new note within about a second of the partner writing it, eve
 notes row written
     │
     ▼
-send_note_notification trigger ──pg_net──▶ send-note-notification Edge Function
-                                               │
-                                               ▼
-                                     WidgetKit push to the partner's widget
-                                               │
-                                               ▼
-                                     widget timeline reload
-                                               │
-                                               ▼
-                       widget calls latest_partner_note with its widget secret
-                                               │
-                                               ▼
-                       widget saves the note to NoteCache and renders it
+send_widget_push trigger ──pg_net──▶ send-widget-push Edge Function
+                                         │
+                                         ▼
+                               WidgetKit push to the partner's widget
+                                         │
+                                         ▼
+                               widget timeline reload
+                                         │
+                                         ▼
+                 widget calls latest_partner_note with its widget secret
+                                         │
+                                         ▼
+                 widget saves the note to NoteCache and renders it
 ```
 
 1. A write to `public.notes` fires a trigger that calls the Edge Function asynchronously, so the write never waits for APNs.
@@ -46,7 +46,7 @@ The token is delivered through two paths so that it is never lost. The widget se
 ## Dead Tokens and Stale Rows
 
 - When APNs answers a widget push with `410` or `BadDeviceToken`, the Edge Function calls `clear_push_token`. The function empties the token of the row and keeps the row and its secret, because the widget may still be alive and deliver a new token later.
-- `clear_push_token` accepts only the `NOTE_PUSH_SECRET` of the Edge Function, and it can do nothing except empty a token.
+- `clear_push_token` accepts only the `SEND_WIDGET_PUSH_SECRET` of the Edge Function, and it can do nothing except empty a token.
 - A `pg_cron` job deletes every row with an empty token that has not been updated for 30 days. The application updates its row every time it becomes active, so only the rows of removed installations disappear.
 
 `set_widget_push_token` only updates a row that already exists for the secret, so an unknown secret changes nothing. The widget cannot use the session of the application, because a refresh token is valid only once and two processes refreshing the same session would invalidate it. The widget secret never expires and is not refreshed. It identifies one widget installation.
@@ -66,4 +66,4 @@ A widget with a timeline that never reloads on its own stays stale when a push i
 
 `NoteCache` keeps only the newest note by `updated_at`, so a response that arrives late never replaces a newer note.
 
-The secrets and local setup are described in [Notifications](notifications.md).
+The secrets and local setup are described in [Widget Pushes](widget-pushes.md).

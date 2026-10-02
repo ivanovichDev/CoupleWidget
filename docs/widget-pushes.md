@@ -1,11 +1,11 @@
-# Notifications
+# Widget Pushes
 
 A new note reaches the partner's Home Screen widget through a WidgetKit push. The push reloads the widget, which then fetches the note from the backend. The application shows no notifications. The sequence is described in [Widget Updates](widget-updates.md).
 
 ## Delivery
 
 1. The widget receives its WidgetKit push token in `NoteWidgetPushHandler` and sends it with the widget secret to the `set_widget_push_token` database function. The application registers the widget secret and the token that it reads from `WidgetCenter.currentPushInfo` with `register_widget_secret`.
-2. Writing a note fires the `send_note_notification` trigger on `public.notes`. The trigger collects the push tokens of the partner and calls the `send-note-notification` Edge Function through `pg_net`, so the write never waits for the network.
+2. Writing a note fires the `send_widget_push` trigger on `public.notes`. The trigger collects the push tokens of the partner and calls the `send-widget-push` Edge Function through `pg_net`, so the write never waits for the network.
 3. The trigger skips widget secrets that have no push token yet. The Edge Function signs a provider token with the APNs key and sends a WidgetKit push to every widget token. A token that APNs reports as dead is emptied through `clear_push_token`.
 4. The push reloads the widget, and the widget fetches the latest note with `latest_partner_note`.
 
@@ -34,22 +34,22 @@ The application and the widget extension share the `group.com.ivanovich.couplewi
 
 ## Edge Function Secrets
 
-The `send-note-notification` function reads these variables:
+The `send-widget-push` function reads these variables:
 
 - `APNS_KEY_ID` is the identifier of the APNs authentication key.
 - `APNS_TEAM_ID` is the identifier of the developer team that owns the key.
 - `APNS_PRIVATE_KEY_BASE64` is the `.p8` file encoded with base64 as one line.
 - `APNS_TOPIC` is the bundle identifier of the application.
-- `NOTE_PUSH_SECRET` is the shared secret that the database sends in the `X-Note-Push-Secret` header.
+- `SEND_WIDGET_PUSH_SECRET` is the shared secret that the database sends in the `X-Send-Widget-Push-Secret` header.
 
-The function also reads `SUPABASE_URL` and `SUPABASE_ANON_KEY`, which Supabase provides to every Edge Function, and calls `clear_push_token` with `NOTE_PUSH_SECRET`. It does not verify JWTs and accepts only requests with the shared secret.
+The function also reads `SUPABASE_URL` and `SUPABASE_ANON_KEY`, which Supabase provides to every Edge Function, and calls `clear_push_token` with `SEND_WIDGET_PUSH_SECRET`. It does not verify JWTs and accepts only requests with the shared secret.
 
 ## Database Secrets
 
 The trigger reads two Vault secrets:
 
 - `project_url` is the base URL of the Supabase API as seen from the database.
-- `note_push_secret` is the same value as `NOTE_PUSH_SECRET`.
+- `SEND_WIDGET_PUSH_SECRET` is the same value as the Edge Function variable of the same name.
 
 When a secret is missing, the trigger skips the push and the note is saved as usual.
 
@@ -61,7 +61,7 @@ Locally the Edge Function reads its variables from `supabase/functions/.env`, wh
 base64 -i AuthKey_KEYID.p8 | pbcopy
 ```
 
-`supabase/seed.sql` creates the Vault secrets for the local stack during `supabase db reset`. The local `project_url` is `http://kong:8000`, the address of the API gateway inside the Docker network. `NOTE_PUSH_SECRET` in `supabase/functions/.env` must match `note_push_secret` in the seed file.
+`supabase/seed.sql` creates the Vault secrets for the local stack during `supabase db reset`. The local `project_url` is `http://kong:8000`, the address of the API gateway inside the Docker network. `SEND_WIDGET_PUSH_SECRET` in `supabase/functions/.env` must match the Vault secret of the same name in the seed file.
 
 Restart the stack after changing the variables:
 
