@@ -4,8 +4,14 @@ import Observation
 
 @Observable
 final class BirthdayViewModel {
-    var birthday: Date
+    var birthday: Date {
+        didSet {
+            isBirthdayChosen = true
+        }
+    }
+
     let range: ClosedRange<Date>
+    private(set) var isBirthdayChosen = false
     private(set) var isSaving = false
 
     private let name: String
@@ -30,7 +36,7 @@ final class BirthdayViewModel {
     }
 
     func submit() async {
-        guard !isSaving else { return }
+        guard isBirthdayChosen, !isSaving else { return }
         isSaving = true
         defer { isSaving = false }
         do {

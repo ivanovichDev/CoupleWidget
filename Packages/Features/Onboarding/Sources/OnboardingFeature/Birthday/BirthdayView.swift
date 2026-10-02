@@ -38,6 +38,7 @@ struct BirthdayView: View {
             PrimaryButton(title: String(localized: "Continue"), isLoading: model.isSaving) {
                 Task { await model.submit() }
             }
+            .disabled(!model.isBirthdayChosen)
         }
     }
 }

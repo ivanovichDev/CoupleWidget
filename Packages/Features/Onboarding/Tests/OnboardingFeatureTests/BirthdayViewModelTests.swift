@@ -22,6 +22,7 @@ struct BirthdayViewModelTests {
         let useCase = RecordingCompleteProfileUseCase()
         let recorder = NavigatorRecorder()
         let model = makeModel(useCase: useCase, recorder: recorder)
+        model.birthday = Self.date(year: 1996, month: 5, day: 14) ?? .now
 
         await model.submit()
 
@@ -31,9 +32,23 @@ struct BirthdayViewModelTests {
     }
 
     @Test
+    func submitIsBlockedUntilBirthdayIsChosen() async {
+        let useCase = RecordingCompleteProfileUseCase()
+        let recorder = NavigatorRecorder()
+        let model = makeModel(useCase: useCase, recorder: recorder)
+
+        await model.submit()
+
+        #expect(!model.isBirthdayChosen)
+        #expect(useCase.received.isEmpty)
+        #expect(recorder.routes.isEmpty)
+    }
+
+    @Test
     func failedSaveStaysOnScreen() async {
         let recorder = NavigatorRecorder()
         let model = makeModel(useCase: RecordingCompleteProfileUseCase(error: .unknown), recorder: recorder)
+        model.birthday = Self.date(year: 1996, month: 5, day: 14) ?? .now
 
         await model.submit()
 
