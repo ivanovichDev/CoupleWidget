@@ -13,16 +13,7 @@ public struct SecondaryButton: View {
 
     public var body: some View {
         Button(action: action) {
-            HStack(spacing: 6) {
-                Image(systemName: systemImage)
-                    .font(.system(size: 14, weight: .semibold))
-                Text(title)
-                    .font(Typography.subheadline.weight(.semibold))
-            }
-            .foregroundStyle(Palette.roseStrong)
-            .padding(.horizontal, Spacing.space4)
-            .frame(height: 36)
-            .glass(.control, in: .capsule)
+            SecondaryButtonLabel(title: title, systemImage: systemImage)
         }
         .buttonStyle(.plain)
     }

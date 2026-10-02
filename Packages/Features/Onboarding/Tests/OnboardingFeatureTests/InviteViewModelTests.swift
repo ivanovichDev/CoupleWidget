@@ -16,6 +16,16 @@ struct InviteViewModelTests {
     }
 
     @Test
+    func partnerCodeDropsEmojiAndSymbols() {
+        let model = makeModel(recorder: NavigatorRecorder())
+
+        model.partnerCode = "K😀7-M é2Q❤️X"
+        model.normalizePartnerCode()
+
+        #expect(model.partnerCode == "K7M2QX")
+    }
+
+    @Test
     func connectRequiresFullCode() async {
         let recorder = NavigatorRecorder()
         let model = makeModel(recorder: recorder)
@@ -92,13 +102,6 @@ struct InviteViewModelTests {
         #expect(recorder.outputs.isEmpty)
         #expect(model.alertMessage == "Your partner hasn’t connected yet.")
         #expect(model.state == .idle)
-    }
-
-    @Test
-    func ownCodeIsSplitWithMiddleDot() {
-        let model = makeModel(recorder: NavigatorRecorder())
-
-        #expect(model.formattedOwnCode == "K7M·2QX")
     }
 
     private func makeModel(

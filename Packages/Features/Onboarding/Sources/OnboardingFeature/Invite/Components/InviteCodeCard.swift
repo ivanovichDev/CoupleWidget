@@ -3,7 +3,6 @@ import SwiftUI
 
 struct InviteCodeCard: View {
     let ownCode: String
-    let formattedOwnCode: String
     let isCodeCopied: Bool
     @Binding var partnerCode: String
     var isPartnerCodeFocused: FocusState<Bool>.Binding
@@ -12,9 +11,9 @@ struct InviteCodeCard: View {
     var body: some View {
         VStack(spacing: 0) {
             SectionLabel(String(localized: "Your code"))
-            Text(formattedOwnCode)
+            Text(ownCode)
                 .font(.system(size: 32, weight: .bold, design: .rounded))
-                .tracking(5)
+                .tracking(8)
                 .monospacedDigit()
                 .foregroundStyle(Palette.ink)
                 .padding(.top, Spacing.space2)
@@ -25,7 +24,7 @@ struct InviteCodeCard: View {
                     systemImage: "doc.on.doc",
                     action: copy
                 )
-                SecondaryButton(title: String(localized: "Share"), systemImage: "square.and.arrow.up") {}
+                SecondaryShareLink(title: String(localized: "Share"), systemImage: "square.and.arrow.up", item: ownCode)
             }
             .padding(.top, Spacing.space3)
             OrDivider()
@@ -33,11 +32,10 @@ struct InviteCodeCard: View {
             SectionLabel(String(localized: "Partner’s code"))
                 .padding(.top, Spacing.space3)
             CodeField(
-                placeholder: String(localized: "Enter 6 characters"),
+                length: InviteViewModel.codeLength,
                 text: $partnerCode,
                 isFocused: isPartnerCodeFocused
             )
-            .submitLabel(.done)
             .padding(.top, Spacing.space2)
         }
         .padding(20)

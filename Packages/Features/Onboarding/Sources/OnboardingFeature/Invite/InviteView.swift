@@ -22,7 +22,6 @@ struct InviteView: View {
             VStack(spacing: 25) {
                 InviteCodeCard(
                     ownCode: model.ownCode,
-                    formattedOwnCode: model.formattedOwnCode,
                     isCodeCopied: model.isCodeCopied,
                     partnerCode: $model.partnerCode,
                     isPartnerCodeFocused: $isCodeFocused

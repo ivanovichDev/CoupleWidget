@@ -7,8 +7,9 @@ final class NameViewModel {
 
     var name = "" {
         didSet {
-            if name.count > Self.maxLength {
-                name = String(name.prefix(Self.maxLength))
+            let normalized = String(name.filter { !$0.isEmojiSymbol }.prefix(Self.maxLength))
+            if normalized != name {
+                name = normalized
             }
         }
     }

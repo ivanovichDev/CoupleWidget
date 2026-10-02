@@ -2,38 +2,36 @@ import DesignSystem
 import SwiftUI
 
 struct CodeField: View {
-    let placeholder: String
+    let length: Int
     @Binding var text: String
     var isFocused: FocusState<Bool>.Binding
 
-    private var prompt: Text {
-        Text(placeholder)
-            .font(Typography.body)
-            .foregroundStyle(Palette.inkMuted)
+    private var characters: [Character] {
+        Array(text)
     }
 
     var body: some View {
-        TextField(text: $text, prompt: prompt) {
-            Text(placeholder)
-        }
-        .font(.system(size: 24, weight: .bold, design: .rounded))
-        .tracking(text.isEmpty ? 0 : 6)
-        .multilineTextAlignment(.center)
-        .foregroundStyle(Palette.ink)
-        .tint(Palette.roseStrong)
-        .textInputAutocapitalization(.characters)
-        .autocorrectionDisabled()
-        .textContentType(.oneTimeCode)
-        .focused(isFocused)
-        .padding(.horizontal, 20)
-        .frame(height: 56)
-        .background {
-            ZStack {
-                Capsule().fill(.white.opacity(0.7))
-                Capsule().strokeBorder(.white.opacity(0.95), lineWidth: 1)
+        HStack(spacing: Spacing.space2) {
+            ForEach(0..<length, id: \.self) { index in
+                CodeCell(
+                    character: index < characters.count ? characters[index] : nil,
+                    isActive: isFocused.wrappedValue && index == min(characters.count, length - 1)
+                )
             }
         }
-        .contentShape(.capsule)
+        .background {
+            TextField("", text: $text)
+                .textContentType(.oneTimeCode)
+                .keyboardType(.asciiCapable)
+                .textInputAutocapitalization(.characters)
+                .autocorrectionDisabled()
+                .focused(isFocused)
+                .tint(.clear)
+                .foregroundStyle(.clear)
+                .opacity(0.011)
+                .accessibilityLabel(String(localized: "Partner’s code, \(length) characters"))
+        }
+        .contentShape(.rect)
         .onTapGesture { isFocused.wrappedValue = true }
     }
 }

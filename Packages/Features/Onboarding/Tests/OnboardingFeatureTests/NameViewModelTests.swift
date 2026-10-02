@@ -34,4 +34,13 @@ struct NameViewModelTests {
 
         #expect(model.name.count == NameViewModel.maxLength)
     }
+
+    @Test
+    func nameDropsEmojiAndKeepsLetters() {
+        let model = NameViewModel(navigator: NavigatorRecorder().navigator)
+
+        model.name = "Анна 😀❤️ O’Neil-1"
+
+        #expect(model.name == "Анна  O’Neil-1")
+    }
 }

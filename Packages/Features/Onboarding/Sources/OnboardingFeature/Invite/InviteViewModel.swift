@@ -19,11 +19,6 @@ final class InviteViewModel {
 
     var partnerCode = ""
 
-    var formattedOwnCode: String {
-        let middle = ownCode.index(ownCode.startIndex, offsetBy: ownCode.count / 2)
-        return "\(ownCode[..<middle])·\(ownCode[middle...])"
-    }
-
     var canConnect: Bool {
         partnerCode.count == Self.codeLength && state == .idle
     }
@@ -54,7 +49,8 @@ final class InviteViewModel {
     }
 
     func normalizePartnerCode() {
-        let normalized = String(partnerCode.uppercased().filter { !$0.isWhitespace }.prefix(Self.codeLength))
+        let allowed = partnerCode.uppercased().filter { $0.isASCII && ($0.isLetter || $0.isNumber) }
+        let normalized = String(allowed.prefix(Self.codeLength))
         if normalized != partnerCode {
             partnerCode = normalized
         }
