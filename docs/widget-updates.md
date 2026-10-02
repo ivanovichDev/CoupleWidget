@@ -37,11 +37,11 @@ send_note_notification trigger ──pg_net──▶ send-note-notification Edge
 ## Widget Token and Widget Secret
 
 - The application creates a random widget secret once and stores it in the App Group.
-- When the user is signed in, the application registers the secret with `register_widget_secret`. The registration carries the APNs environment and the WidgetKit push token. The application reads the token from `WidgetCenter.currentPushInfo` and falls back to the token that the widget stored in the App Group. It registers when it opens the home screen and every time it becomes active.
-- The widget receives its WidgetKit push token in `NoteWidgetPushHandler`, stores it in the App Group, and sends it with its secret to `set_widget_push_token`.
+- When the user is signed in, the application registers the secret with `register_widget_secret`. The registration carries the APNs environment and the WidgetKit push token, which the application reads from `WidgetCenter.currentPushInfo`. It registers when it opens the home screen and every time it becomes active.
+- The widget receives its WidgetKit push token in `NoteWidgetPushHandler` and sends it with its secret to `set_widget_push_token`.
 - `public.push_tokens` stores one row per widget installation with the widget secret, the owner, the push token, and the APNs environment. The push token is empty until the widget delivers it. A user with several devices has one row for each of them.
 
-The token is delivered through two paths so that it is never lost. The widget sends a new token itself, because that is the moment the system creates it. The application sends the current token every time it becomes active, so a token that the widget failed to deliver, or a widget added before the user signed in, reaches the server the next time the user opens the application.
+The token is delivered through two paths so that it is never lost. The widget sends a new token itself, because that is the moment the system creates it. The application sends the current token every time it becomes active, so a token that the widget failed to deliver, or a widget added before the user signed in, reaches the server the next time the user opens the application. The token is never stored on the device.
 
 ## Dead Tokens and Stale Rows
 

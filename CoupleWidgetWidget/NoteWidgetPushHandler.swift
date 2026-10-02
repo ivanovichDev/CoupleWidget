@@ -5,8 +5,7 @@ import WidgetKit
 
 nonisolated struct NoteWidgetPushHandler: WidgetPushHandler {
     func pushTokenDidChange(_ pushInfo: WidgetPushInfo, widgets: [WidgetInfo]) {
-        let token = WidgetPushTokenStore.hexString(from: pushInfo.token)
-        try? WidgetPushTokenStore()?.save(token)
+        let token = PushTokenFormat.hexString(from: pushInfo.token)
         Task {
             guard
                 let container = WidgetContainer(),

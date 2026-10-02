@@ -6,8 +6,6 @@ import WidgetData
 nonisolated struct WidgetContainer {
     let fetchPartnerNote: FetchPartnerNoteUseCase
     let registerPushToken: RegisterWidgetPushTokenUseCase
-    let noteStore: NoteCacheStore?
-    let tokenStore: WidgetPushTokenStore?
     let secretStore: WidgetSecretStore?
 
     init?(bundle: Bundle = .main) {
@@ -22,8 +20,6 @@ nonisolated struct WidgetContainer {
         let repository = URLSessionWidgetNoteRepository(baseURL: url, key: key)
         fetchPartnerNote = AppFetchPartnerNoteUseCase(repository: repository)
         registerPushToken = AppRegisterWidgetPushTokenUseCase(repository: repository)
-        noteStore = NoteCacheStore()
-        tokenStore = WidgetPushTokenStore()
         secretStore = WidgetSecretStore()
     }
 }

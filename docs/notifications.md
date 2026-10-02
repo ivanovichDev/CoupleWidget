@@ -4,7 +4,7 @@ A new note reaches the partner's Home Screen widget through a WidgetKit push. Th
 
 ## Delivery
 
-1. The widget receives its WidgetKit push token in `NoteWidgetPushHandler`, stores it in the App Group container, and sends it with the widget secret to the `set_widget_push_token` database function. The application registers the widget secret, and the stored token when there is one, with `register_widget_secret`.
+1. The widget receives its WidgetKit push token in `NoteWidgetPushHandler` and sends it with the widget secret to the `set_widget_push_token` database function. The application registers the widget secret and the token that it reads from `WidgetCenter.currentPushInfo` with `register_widget_secret`.
 2. Writing a note fires the `send_note_notification` trigger on `public.notes`. The trigger collects the push tokens of the partner and calls the `send-note-notification` Edge Function through `pg_net`, so the write never waits for the network.
 3. The trigger skips widget secrets that have no push token yet. The Edge Function signs a provider token with the APNs key and sends a WidgetKit push to every widget token. A token that APNs reports as dead is emptied through `clear_push_token`.
 4. The push reloads the widget, and the widget fetches the latest note with `latest_partner_note`.
@@ -23,10 +23,9 @@ The WidgetKit push uses the `widgets` push type and the `com.ivanovich.couplewid
 
 ## App Group
 
-The application and the widget extension share the `group.com.ivanovich.couplewidget` App Group. It holds three files:
+The application and the widget extension share the `group.com.ivanovich.couplewidget` App Group. It holds two files, both managed by `NoteCache`:
 
-- The latest note as a JSON file with a schema version, managed by `NoteCache`.
-- The WidgetKit push token of the widget.
+- The latest note as a JSON file with a schema version.
 - The widget secret.
 
 ## Push Tokens

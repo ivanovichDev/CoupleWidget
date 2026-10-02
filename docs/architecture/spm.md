@@ -50,7 +50,7 @@ Depends on: `SwiftUI` only.
 
 ### NoteCache
 
-The latest note of the partner, shared between the application and the widget through the App Group container. The note is stored as a versioned JSON file and is replaced only by a note with a newer `updated_at`. The package also keeps the WidgetKit push token that the widget passes to the application and the widget secret that the application creates for the widget.
+The latest note of the partner, shared between the application and the widget through the App Group container. The note is stored as a versioned JSON file and is replaced only by a note with a newer `updated_at`. The package also keeps the widget secret that the application creates and the widget reads.
 Depends on: `Foundation` only.
 
 ### Features

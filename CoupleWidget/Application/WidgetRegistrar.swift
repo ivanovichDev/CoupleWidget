@@ -20,10 +20,7 @@ final class WidgetRegistrar {
 
     @concurrent
     private static func currentPushToken() async -> String? {
-        if let info = await WidgetCenter.shared.currentPushInfo {
-            return WidgetPushTokenStore.hexString(from: info.token)
-        }
-        return WidgetPushTokenStore()?.read()
+        await WidgetCenter.shared.currentPushInfo.map { PushTokenFormat.hexString(from: $0.token) }
     }
 
     private static var environment: PushEnvironment {
