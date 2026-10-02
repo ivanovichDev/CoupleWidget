@@ -23,4 +23,11 @@ struct WidgetPushTokenStoreTests {
 
         #expect(store.read() == "c3d4")
     }
+
+    @Test
+    func encodesTokenAsLowercaseHex() {
+        let token = Data([0x00, 0x0a, 0xff, 0x10])
+
+        #expect(WidgetPushTokenStore.hexString(from: token) == "000aff10")
+    }
 }

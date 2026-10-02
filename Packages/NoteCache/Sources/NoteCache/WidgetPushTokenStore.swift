@@ -16,6 +16,10 @@ public struct WidgetPushTokenStore: Sendable {
         self.init(directory: directory)
     }
 
+    public static func hexString(from token: Data) -> String {
+        token.map { String(format: "%02x", $0) }.joined()
+    }
+
     public func read() -> String? {
         guard let token = try? String(contentsOf: fileURL, encoding: .utf8), !token.isEmpty else {
             return nil

@@ -17,9 +17,9 @@
 		0C14520E0001306672A30056B3AE /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 0C14520D0001306672A30056B3AE /* DesignSystem */; };
 		0C1452110001306672A30056B3AE /* CoupleWidgetWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0C1452010001306672A30056B3AE /* CoupleWidgetWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0C1452150001306672A30056B3AE /* NoteCache in Frameworks */ = {isa = PBXBuildFile; productRef = 0C1452140001306672A30056B3AE /* NoteCache */; };
-		0C1452230001306672A30056B3AE /* NoteCache in Frameworks */ = {isa = PBXBuildFile; productRef = 0C1452220001306672A30056B3AE /* NoteCache */; };
-		0C1452260001306672A30056B3AE /* CoupleWidgetNotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0C1452160001306672A30056B3AE /* CoupleWidgetNotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		0C1452280001306672A30056B3AE /* NoteCache in Frameworks */ = {isa = PBXBuildFile; productRef = 0C1452270001306672A30056B3AE /* NoteCache */; };
+		58F5CB2F70E26ACB6CC4E4A5 /* WidgetData in Frameworks */ = {isa = PBXBuildFile; productRef = B4719A2AF0D7C3C91E4BFBCD /* WidgetData */; };
+		A3E6D21F19C561B1D67D2AF5 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 590D11E97B6EA584619F170F /* Domain */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,13 +44,6 @@
 			remoteGlobalIDString = 0C1452040001306672A30056B3AE;
 			remoteInfo = CoupleWidgetWidget;
 		};
-		0C1452240001306672A30056B3AE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0C144E68306672A10056B3AE /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0C1452190001306672A30056B3AE;
-			remoteInfo = CoupleWidgetNotificationService;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,7 +54,6 @@
 			dstSubfolderSpec = 13;
 			files = (
 				0C1452110001306672A30056B3AE /* CoupleWidgetWidget.appex in Embed Foundation Extensions */,
-				0C1452260001306672A30056B3AE /* CoupleWidgetNotificationService.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,7 +77,6 @@
 		0C1451200001306672A30056B3AE /* Example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Example.xcconfig; sourceTree = "<group>"; };
 		0C1452010001306672A30056B3AE /* CoupleWidgetWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CoupleWidgetWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C1452130001306672A30056B3AE /* NoteCache */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NoteCache; sourceTree = "<group>"; };
-		0C1452160001306672A30056B3AE /* CoupleWidgetNotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CoupleWidgetNotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -103,13 +94,6 @@
 			);
 			target = 0C1452040001306672A30056B3AE /* CoupleWidgetWidget */;
 		};
-		0C1452180001306672A30056B3AE /* Exceptions for "CoupleWidgetNotificationService" folder in "CoupleWidgetNotificationService" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 0C1452190001306672A30056B3AE /* CoupleWidgetNotificationService */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -123,11 +107,15 @@
 		};
 		0C144E80306672A10056B3AE /* CoupleWidgetTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = CoupleWidgetTests;
 			sourceTree = "<group>";
 		};
 		0C144E8A306672A20056B3AE /* CoupleWidgetUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = CoupleWidgetUITests;
 			sourceTree = "<group>";
 		};
@@ -137,14 +125,6 @@
 				0C1452030001306672A30056B3AE /* Exceptions for "CoupleWidgetWidget" folder in "CoupleWidgetWidget" target */,
 			);
 			path = CoupleWidgetWidget;
-			sourceTree = "<group>";
-		};
-		0C1452170001306672A30056B3AE /* CoupleWidgetNotificationService */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				0C1452180001306672A30056B3AE /* Exceptions for "CoupleWidgetNotificationService" folder in "CoupleWidgetNotificationService" target */,
-			);
-			path = CoupleWidgetNotificationService;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -185,14 +165,8 @@
 			files = (
 				0C14520E0001306672A30056B3AE /* DesignSystem in Frameworks */,
 				0C1452150001306672A30056B3AE /* NoteCache in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0C14521B0001306672A30056B3AE /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0C1452230001306672A30056B3AE /* NoteCache in Frameworks */,
+				A3E6D21F19C561B1D67D2AF5 /* Domain in Frameworks */,
+				58F5CB2F70E26ACB6CC4E4A5 /* WidgetData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +178,6 @@
 			children = (
 				0C144E72306672A10056B3AE /* CoupleWidget */,
 				0C1452020001306672A30056B3AE /* CoupleWidgetWidget */,
-				0C1452170001306672A30056B3AE /* CoupleWidgetNotificationService */,
 				0C1451030001306672A30056B3AE /* Configurations */,
 				0C1450B20007306672A30056B3AE /* Packages */,
 				0C144EA2306672A10056B3AE /* Tools */,
@@ -219,7 +192,6 @@
 			children = (
 				0C144E70306672A10056B3AE /* CoupleWidget.app */,
 				0C1452010001306672A30056B3AE /* CoupleWidgetWidget.appex */,
-				0C1452160001306672A30056B3AE /* CoupleWidgetNotificationService.appex */,
 				0C144E7D306672A10056B3AE /* CoupleWidgetTests.xctest */,
 				0C144E87306672A20056B3AE /* CoupleWidgetUITests.xctest */,
 			);
@@ -284,7 +256,6 @@
 			);
 			dependencies = (
 				0C1452100001306672A30056B3AE /* PBXTargetDependency */,
-				0C1452250001306672A30056B3AE /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				0C144E72306672A10056B3AE /* CoupleWidget */,
@@ -321,8 +292,6 @@
 				0C144E80306672A10056B3AE /* CoupleWidgetTests */,
 			);
 			name = CoupleWidgetTests;
-			packageProductDependencies = (
-			);
 			productName = CoupleWidgetTests;
 			productReference = 0C144E7D306672A10056B3AE /* CoupleWidgetTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -344,8 +313,6 @@
 				0C144E8A306672A20056B3AE /* CoupleWidgetUITests */,
 			);
 			name = CoupleWidgetUITests;
-			packageProductDependencies = (
-			);
 			productName = CoupleWidgetUITests;
 			productReference = 0C144E87306672A20056B3AE /* CoupleWidgetUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -369,32 +336,11 @@
 			packageProductDependencies = (
 				0C14520D0001306672A30056B3AE /* DesignSystem */,
 				0C1452140001306672A30056B3AE /* NoteCache */,
+				590D11E97B6EA584619F170F /* Domain */,
+				B4719A2AF0D7C3C91E4BFBCD /* WidgetData */,
 			);
 			productName = CoupleWidgetWidget;
 			productReference = 0C1452010001306672A30056B3AE /* CoupleWidgetWidget.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		0C1452190001306672A30056B3AE /* CoupleWidgetNotificationService */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0C14521D0001306672A30056B3AE /* Build configuration list for PBXNativeTarget "CoupleWidgetNotificationService" */;
-			buildPhases = (
-				0C14521A0001306672A30056B3AE /* Sources */,
-				0C14521B0001306672A30056B3AE /* Frameworks */,
-				0C14521C0001306672A30056B3AE /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				0C1452170001306672A30056B3AE /* CoupleWidgetNotificationService */,
-			);
-			name = CoupleWidgetNotificationService;
-			packageProductDependencies = (
-				0C1452220001306672A30056B3AE /* NoteCache */,
-			);
-			productName = CoupleWidgetNotificationService;
-			productReference = 0C1452160001306672A30056B3AE /* CoupleWidgetNotificationService.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -441,7 +387,6 @@
 				0C144E7C306672A10056B3AE /* CoupleWidgetTests */,
 				0C144E86306672A20056B3AE /* CoupleWidgetUITests */,
 				0C1452040001306672A30056B3AE /* CoupleWidgetWidget */,
-				0C1452190001306672A30056B3AE /* CoupleWidgetNotificationService */,
 			);
 		};
 /* End PBXProject section */
@@ -469,13 +414,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		0C1452070001306672A30056B3AE /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0C14521C0001306672A30056B3AE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -536,13 +474,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0C14521A0001306672A30056B3AE /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -560,11 +491,6 @@
 			isa = PBXTargetDependency;
 			target = 0C1452040001306672A30056B3AE /* CoupleWidgetWidget */;
 			targetProxy = 0C14520F0001306672A30056B3AE /* PBXContainerItemProxy */;
-		};
-		0C1452250001306672A30056B3AE /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0C1452190001306672A30056B3AE /* CoupleWidgetNotificationService */;
-			targetProxy = 0C1452240001306672A30056B3AE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1251,126 +1177,6 @@
 			};
 			name = "Release-Production";
 		};
-		0C14521E0001306672A30056B3AE /* Debug-Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C1451010001306672A30056B3AE /* Staging.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = CoupleWidgetNotificationService/CoupleWidgetNotificationService.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = BJ6BQUG36A;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CoupleWidgetNotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Couple Widget";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ivanovich.couplewidget.notificationservice;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "Debug-Staging";
-		};
-		0C14521F0001306672A30056B3AE /* Debug-Production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C1451020001306672A30056B3AE /* Production.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = CoupleWidgetNotificationService/CoupleWidgetNotificationService.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = BJ6BQUG36A;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CoupleWidgetNotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Couple Widget";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ivanovich.couplewidget.notificationservice;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "Debug-Production";
-		};
-		0C1452200001306672A30056B3AE /* Release-Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C1451010001306672A30056B3AE /* Staging.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = CoupleWidgetNotificationService/CoupleWidgetNotificationService.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = BJ6BQUG36A;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CoupleWidgetNotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Couple Widget";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ivanovich.couplewidget.notificationservice;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "Release-Staging";
-		};
-		0C1452210001306672A30056B3AE /* Release-Production */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C1451020001306672A30056B3AE /* Production.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = CoupleWidgetNotificationService/CoupleWidgetNotificationService.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = BJ6BQUG36A;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = CoupleWidgetNotificationService/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Couple Widget";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ivanovich.couplewidget.notificationservice;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = "Release-Production";
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1429,17 +1235,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "Release-Production";
 		};
-		0C14521D0001306672A30056B3AE /* Build configuration list for PBXNativeTarget "CoupleWidgetNotificationService" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0C14521E0001306672A30056B3AE /* Debug-Staging */,
-				0C14521F0001306672A30056B3AE /* Debug-Production */,
-				0C1452200001306672A30056B3AE /* Release-Staging */,
-				0C1452210001306672A30056B3AE /* Release-Production */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "Release-Production";
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -1491,13 +1286,17 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = NoteCache;
 		};
-		0C1452220001306672A30056B3AE /* NoteCache */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = NoteCache;
-		};
 		0C1452270001306672A30056B3AE /* NoteCache */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NoteCache;
+		};
+		590D11E97B6EA584619F170F /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+		B4719A2AF0D7C3C91E4BFBCD /* WidgetData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WidgetData;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

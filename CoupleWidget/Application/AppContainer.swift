@@ -7,7 +7,7 @@ import Supabase
 
 final class AppContainer {
     let sessionState: SessionStateUseCase
-    let pushNotificationRegistrar: PushNotificationRegistrar
+    let widgetRegistrar: WidgetRegistrar
     let partnerName: PartnerNameUseCase
     let messageQuota: MessageQuotaUseCase
 
@@ -15,7 +15,7 @@ final class AppContainer {
     private let sessionRepository: SessionRepository
     private let profileRepository: ProfileRepository
     private let coupleRepository: CoupleRepository
-    private let pushTokenRepository: PushTokenRepository
+    private let widgetSecretRepository: WidgetSecretRepository
     private let messageRepository: MessageRepository
     private let signInWithApple: SignInWithAppleUseCase
     private let completeProfile: CompleteProfileUseCase
@@ -32,7 +32,7 @@ final class AppContainer {
         sessionRepository = SupabaseSessionRepository(client: supabase)
         profileRepository = SupabaseProfileRepository(client: supabase)
         coupleRepository = SupabaseCoupleRepository(client: supabase)
-        pushTokenRepository = SupabasePushTokenRepository(client: supabase)
+        widgetSecretRepository = SupabaseWidgetSecretRepository(client: supabase)
         messageRepository = SupabaseMessageRepository(client: supabase)
         sessionState = AppSessionStateUseCase(
             sessionRepository: sessionRepository,
@@ -46,8 +46,8 @@ final class AppContainer {
         partnerName = AppPartnerNameUseCase(repository: coupleRepository)
         messageQuota = AppMessageQuotaUseCase(repository: messageRepository)
         sendMessage = AppSendMessageUseCase(repository: messageRepository)
-        pushNotificationRegistrar = PushNotificationRegistrar(
-            registerPushToken: AppRegisterPushTokenUseCase(repository: pushTokenRepository)
+        widgetRegistrar = WidgetRegistrar(
+            registerWidgetSecret: AppRegisterWidgetSecretUseCase(repository: widgetSecretRepository)
         )
     }
 

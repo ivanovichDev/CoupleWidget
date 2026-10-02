@@ -4,13 +4,12 @@ The layers and features of the application are split into local Swift packages. 
 
 ## Repository Structure
 
-The Xcode project contains only the application target, the widget extension, and the notification service extension. Every other piece of code lives in a local package.
+The Xcode project contains only the application target and the widget extension. Every other piece of code lives in a local package.
 
 ```
 CoupleWidget.xcodeproj
 CoupleWidget/
 CoupleWidgetWidget/
-CoupleWidgetNotificationService/
 Packages/
     Domain/
     Data/
@@ -31,8 +30,12 @@ Depends on: `Foundation` only.
 
 ### Data
 
-Repository implementations, data transfer objects, the Supabase client configuration, and the connectivity monitor.
-Depends on: `Domain`, `Supabase`.
+Repository implementations, data transfer objects, the Supabase client configuration, and the connectivity monitor. The package has two targets:
+
+- `Data` implements the repositories of the application with the Supabase SDK.
+- `WidgetData` implements the repository of the widget with `URLSession` and the anon key, so the widget extension never links the Supabase SDK.
+
+`Data` depends on: `Domain`, `Supabase`. `WidgetData` depends on: `Domain`.
 
 ### DesignSystem
 
@@ -47,7 +50,7 @@ Depends on: `SwiftUI` only.
 
 ### NoteCache
 
-The latest note of the partner, shared between the application, the widget, and the notification service extension through the App Group container. The note is stored as a versioned JSON file and is replaced only by a note with a newer `updated_at`. The package also keeps the WidgetKit push token that the widget passes to the application.
+The latest note of the partner, shared between the application and the widget through the App Group container. The note is stored as a versioned JSON file and is replaced only by a note with a newer `updated_at`. The package also keeps the WidgetKit push token that the widget passes to the application and the widget secret that the application creates for the widget.
 Depends on: `Foundation` only.
 
 ### Features
@@ -62,35 +65,24 @@ Depends on: all packages.
 
 ### Widget Extension
 
-The widget timeline provider, the widget push handler, and the widget views. The widget reads the latest note from `NoteCache` and stores its WidgetKit push token there.
-Depends on: `NoteCache`, `DesignSystem`.
-
-### Notification Service Extension
-
-Receives every note notification before it is shown, writes the note to `NoteCache`, and reloads the widget.
-Depends on: `NoteCache`.
+The widget timeline provider, the widget push handler, the widget views, and a small container that wires the repository and the use cases. The widget fetches the latest note with `FetchPartnerNoteUseCase`, stores it in `NoteCache`, and registers its WidgetKit push token with `RegisterWidgetPushTokenUseCase`.
+Depends on: `Domain`, `WidgetData`, `NoteCache`, `DesignSystem`.
 
 ## Dependency Graph
 
 ```
-                 Application
-     ┌──────────┬──────┴──────┬──────────────┐
-     ▼          ▼             ▼              ▼
- Features      Data     DesignSystem     NoteCache
-     │          │             ▲              ▲
-     ▼          ▼             │              │
-   ───────── Domain ───────   │              │
-                              │              │
- Widget ──────────────────────┴──────────────┤
-                                             │
- Notification Service ───────────────────────┘
+Application ──▶ Features, Data, DesignSystem, NoteCache
+Widget      ──▶ Domain, WidgetData, NoteCache, DesignSystem
+Features    ──▶ Domain, DesignSystem
+Data        ──▶ Domain, Supabase
+WidgetData  ──▶ Domain
 ```
 
 ## Package Boundaries
 
-- Only the application target imports `Data`.
+- Only the application target imports `Data`, and only the widget extension imports `WidgetData`.
 - Feature packages never import other feature packages.
-- The widget extension and the notification service extension never import `Domain`, `Data`, or any feature.
+- The widget extension never imports `Data` or any feature.
 - `DesignSystem` and `NoteCache` never import `Domain`.
 
 ## Fakes
@@ -147,6 +139,7 @@ let package = Package(
     platforms: [.iOS(.v26)],
     products: [
         .library(name: "Data", targets: ["Data"]),
+        .library(name: "WidgetData", targets: ["WidgetData"]),
     ],
     dependencies: [
         .package(path: "../Domain"),
@@ -160,7 +153,9 @@ let package = Package(
                 .product(name: "Supabase", package: "supabase-swift"),
             ]
         ),
+        .target(name: "WidgetData", dependencies: ["Domain"]),
         .testTarget(name: "DataTests", dependencies: ["Data"]),
+        .testTarget(name: "WidgetDataTests", dependencies: ["WidgetData", "Domain"]),
     ]
 )
 ```

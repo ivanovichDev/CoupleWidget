@@ -3,10 +3,12 @@ import MainFeature
 import OnboardingFeature
 import SignInFeature
 import SwiftUI
+import WidgetKit
 
 @main
 struct CoupleWidgetApp: App {
-    @UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    @Environment(\.scenePhase)
+    private var scenePhase
     @State private var router: AppRouter
     private let container: AppContainer
 
@@ -54,12 +56,18 @@ struct CoupleWidgetApp: App {
             .preferredColorScheme(.light)
             .animation(.default, value: router.rootScreen)
             .task {
-                appDelegate.pushNotificationRegistrar = container.pushNotificationRegistrar
                 await router.start()
+            }
+            .onChange(of: scenePhase, initial: true) {
+                guard scenePhase == .active else { return }
+                WidgetCenter.shared.reloadAllTimelines()
+                if case .home = router.rootScreen {
+                    Task { await container.widgetRegistrar.register() }
+                }
             }
             .task(id: router.rootScreen) {
                 if case .home = router.rootScreen {
-                    await container.pushNotificationRegistrar.requestAuthorization()
+                    await container.widgetRegistrar.register()
                 }
             }
         }

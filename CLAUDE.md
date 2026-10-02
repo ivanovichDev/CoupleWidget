@@ -11,7 +11,6 @@ Love Tunnel is an iOS app for couples. Partners send each other short notes that
 - `Packages/NoteCache` holds the latest note shared with the widget through the App Group.
 - `Packages/Features/` contains one package per feature with presentation code only.
 - `CoupleWidgetWidget/` is the Home Screen widget extension.
-- `CoupleWidgetNotificationService/` is the notification service extension that stores incoming notes for the widget.
 - `Tools/ViewStyleLint` is the SwiftSyntax checker for SwiftUI views.
 - `Configurations/` holds the Staging and Production configuration files.
 - `supabase/` holds the local Supabase configuration, the database migrations, and the Edge Functions.
@@ -22,9 +21,9 @@ Environments, build configurations, schemes, and the local Supabase stack are de
 
 Profiles, couples, and notes in the database are described in [docs/database.md](docs/database.md).
 
-Note notifications, the notification service extension, and the widget cache are described in [docs/notifications.md](docs/notifications.md).
+WidgetKit pushes, push tokens, and the widget cache are described in [docs/notifications.md](docs/notifications.md).
 
-The instant widget update pipeline is described in [docs/widget-updates.md](docs/widget-updates.md).
+The widget update pipeline is described in [docs/widget-updates.md](docs/widget-updates.md).
 
 Plans, subscriptions, and note limits are described in [docs/plans.md](docs/plans.md).
 

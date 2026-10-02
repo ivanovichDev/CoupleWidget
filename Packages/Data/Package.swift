@@ -5,7 +5,8 @@ let package = Package(
     name: "Data",
     platforms: [.iOS(.v26)],
     products: [
-        .library(name: "Data", targets: ["Data"])
+        .library(name: "Data", targets: ["Data"]),
+        .library(name: "WidgetData", targets: ["WidgetData"])
     ],
     dependencies: [
         .package(path: "../Domain"),
@@ -19,12 +20,20 @@ let package = Package(
                 .product(name: "Supabase", package: "supabase-swift")
             ]
         ),
+        .target(
+            name: "WidgetData",
+            dependencies: ["Domain"]
+        ),
         .testTarget(
             name: "DataTests",
             dependencies: [
                 "Data",
                 .product(name: "Supabase", package: "supabase-swift")
             ]
+        ),
+        .testTarget(
+            name: "WidgetDataTests",
+            dependencies: ["WidgetData", "Domain"]
         )
     ]
 )
