@@ -2,19 +2,11 @@ type Environment = "sandbox" | "production";
 
 type Recipient = {
   token: string;
-  kind: "alert" | "widget";
   environment: Environment;
 };
 
-type Note = {
-  author_name: string;
-  text: string;
-  updated_at: number;
-};
-
-type NotificationRequest = {
+type ReloadRequest = {
   recipients: Recipient[];
-  note: Note;
 };
 
 const apnsHosts: Record<Environment, string> = {
@@ -23,7 +15,6 @@ const apnsHosts: Record<Environment, string> = {
 };
 
 const providerTokenLifetimeSeconds = 50 * 60;
-const widgetPushDelayMilliseconds = 1000;
 
 let providerToken: { value: string; issuedAt: number } | undefined;
 
@@ -97,22 +88,7 @@ async function post(recipient: Recipient, token: string, headers: Record<string,
     body: JSON.stringify(payload),
   });
   const reason = response.ok ? undefined : (await response.json().catch(() => undefined))?.reason;
-  return { token: recipient.token, kind: recipient.kind, status: response.status, reason };
-}
-
-function sendAlert(recipient: Recipient, note: Note, token: string) {
-  return post(recipient, token, {
-    "apns-topic": requiredEnv("APNS_TOPIC"),
-    "apns-push-type": "alert",
-    "apns-priority": "10",
-  }, {
-    aps: {
-      alert: { title: note.author_name, body: note.text },
-      sound: "default",
-      "mutable-content": 1,
-    },
-    note: { author_name: note.author_name, updated_at: note.updated_at },
-  });
+  return { token: recipient.token, status: response.status, reason };
 }
 
 function sendWidgetReload(recipient: Recipient, token: string) {
@@ -125,6 +101,21 @@ function sendWidgetReload(recipient: Recipient, token: string) {
   });
 }
 
+function isDeadToken(result: { status: number; reason?: string }): boolean {
+  return result.status === 410 || result.reason === "BadDeviceToken";
+}
+
+async function clearToken(token: string) {
+  await fetch(`${requiredEnv("SUPABASE_URL")}/rest/v1/rpc/clear_push_token`, {
+    method: "POST",
+    headers: {
+      "apikey": requiredEnv("SUPABASE_ANON_KEY"),
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ widget_token: token, push_secret: requiredEnv("NOTE_PUSH_SECRET") }),
+  });
+}
+
 Deno.serve(async (request) => {
   if (request.method !== "POST") {
     return new Response(null, { status: 405 });
@@ -132,14 +123,9 @@ Deno.serve(async (request) => {
   if (!isAuthorized(request)) {
     return new Response(null, { status: 401 });
   }
-  const { recipients, note } = await request.json() as NotificationRequest;
+  const { recipients } = await request.json() as ReloadRequest;
   const token = await currentProviderToken();
-  const alertRecipients = recipients.filter((recipient) => recipient.kind === "alert");
-  const widgetRecipients = recipients.filter((recipient) => recipient.kind === "widget");
-  const alertResults = await Promise.all(alertRecipients.map((recipient) => sendAlert(recipient, note, token)));
-  if (widgetRecipients.length > 0) {
-    await new Promise((resolve) => setTimeout(resolve, widgetPushDelayMilliseconds));
-  }
-  const widgetResults = await Promise.all(widgetRecipients.map((recipient) => sendWidgetReload(recipient, token)));
-  return Response.json({ results: [...alertResults, ...widgetResults] });
+  const results = await Promise.all(recipients.map((recipient) => sendWidgetReload(recipient, token)));
+  await Promise.all(results.filter(isDeadToken).map((result) => clearToken(result.token)));
+  return Response.json({ results });
 });

@@ -10,7 +10,7 @@ Every user has a plan that limits how often notes can be written. The limits app
 - A write after the daily limit is reached fails with `daily_note_limit_reached`.
 - The `reset-usage-counters` pg_cron job sets `notes_sent_today` to zero every day at 00:00 UTC.
 
-The tables are closed to the application and are written only by the database. A rejected write sends no notification.
+The tables are closed to the application and are written only by the database. A rejected write triggers no widget update.
 
 ## Quota for the Application
 
