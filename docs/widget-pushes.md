@@ -11,7 +11,7 @@ A new note reaches the partner's Home Screen widget through a WidgetKit push. Th
 
 ## Delivery Limits
 
-The system budgets WidgetKit pushes, performs them opportunistically, and drops the ones that exceed the budget, so a push is a hint and not a guarantee. The widget stays correct without it: it reloads and fetches the note when the application becomes active, and it retries a failed request after 15 minutes. The Edge Function sends one push for every note, which stays far below the budget while notes are limited by the plan. A plan without a daily limit needs throttling on the server before it ships.
+The system budgets WidgetKit pushes, performs them opportunistically, and drops the ones that exceed the budget, so a push is a hint and not a guarantee. The widget stays correct without it: it reloads and fetches the note when the application becomes active, and it retries a failed request after 15 minutes. The Edge Function sends one push for every note, so the limits of the plan bound the number of pushes. A plan must keep a non-zero cooldown, otherwise nothing limits the pushes that the system budgets.
 
 ## Payload
 
