@@ -9,6 +9,10 @@ A new note reaches the partner's Home Screen widget through a WidgetKit push. Th
 3. The trigger skips widget secrets that have no push token yet. The Edge Function signs a provider token with the APNs key and sends a WidgetKit push to every widget token. A token that APNs reports as dead is emptied through `clear_push_token`.
 4. The push reloads the widget, and the widget fetches the latest note with `latest_partner_note`.
 
+## Delivery Limits
+
+The system budgets WidgetKit pushes, performs them opportunistically, and drops the ones that exceed the budget, so a push is a hint and not a guarantee. The widget stays correct without it: it reloads and fetches the note when the application becomes active, and it retries a failed request after 15 minutes. The Edge Function sends one push for every note, which stays far below the budget while notes are limited by the plan. A plan without a daily limit needs throttling on the server before it ships.
+
 ## Payload
 
 The WidgetKit push uses the `widgets` push type and the `com.ivanovich.couplewidget.push-type.widgets` topic, and carries no content:
@@ -27,6 +31,12 @@ The application and the widget extension share the `group.com.ivanovich.couplewi
 
 - The latest note as a JSON file with a schema version.
 - The widget secret.
+
+## Capabilities
+
+- The widget extension has the `aps-environment` entitlement, because it receives the WidgetKit push token.
+- The application has no `aps-environment` entitlement. It never registers for remote notifications, never asks for notification permission, and reads the token of the widget from `WidgetCenter.currentPushInfo`.
+- Both targets have the App Group entitlement, which `NoteCache` uses.
 
 ## Push Tokens
 
@@ -52,6 +62,8 @@ The trigger reads two Vault secrets:
 - `SEND_WIDGET_PUSH_SECRET` is the same value as the Edge Function variable of the same name.
 
 When a secret is missing, the trigger skips the push and the note is saved as usual.
+
+A hosted project has no seed, so both secrets are created once by hand. `SEND_WIDGET_PUSH_SECRET` is created in Vault with `vault.create_secret`, and the Edge Function variables are set with `supabase secrets set`. A Vault secret cannot be renamed with an update of `vault.secrets`. Use `vault.update_secret` with a new name.
 
 ## Local Setup
 

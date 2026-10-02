@@ -35,3 +35,14 @@ Couples keep no history. When a member row is deleted, a trigger deletes the who
 Every member of a couple has at most one note in `public.notes`, identified by the couple and the author. A new note replaces the previous one through an upsert. The partner reads the note of the other member, and only the author can write it. The database accepts up to 500 characters and updates `updated_at` on every change.
 
 The application writes the note with the `send_note` function, which finds the couple of the signed-in user and returns the updated quota described in [Plans and Usage](plans.md). The `partner_name` function returns the name of the other member of the couple.
+
+## Widget Registrations
+
+`public.push_tokens` holds one row for every widget installation. The table is closed to every role, and the functions below are its only interface:
+
+- `register_widget_secret` is called by the signed-in application. It assigns the widget secret to the user and stores the APNs environment and the push token of the widget.
+- `set_widget_push_token` is called by the widget with its secret and sets the push token of the existing row.
+- `latest_partner_note` is called by the widget with its secret and returns the latest note that the partner of the secret owner wrote.
+- `clear_push_token` is called by the Edge Function with a shared secret and empties a token that APNs reports as dead.
+
+The widget has no session, so `set_widget_push_token` and `latest_partner_note` are the only functions that the `anon` role can call. Both do nothing for an unknown secret. A `pg_cron` job deletes rows with an empty token that have not been updated for 30 days. The pipeline is described in [Widget Updates](widget-updates.md).
